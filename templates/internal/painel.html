@@ -1,0 +1,45 @@
+{% extends 'base_internal.html' %}
+{% load static %}
+{% block title %}Painel{% endblock %}
+{% block content %}
+<section class="dash-title-row">
+  <div><span class="dash-tag">Visão geral</span><h1>Bem-vindo de volta{% if request.user.first_name %}, {{ request.user.first_name }}{% endif %}!</h1><p>Acompanhe suas doações, coletas e o impacto gerado.</p></div>
+  <a class="btn btn-primary" href="{% url 'doacao_criar' %}"><span class="button-plus" data-icon="package"></span>Cadastrar nova doação</a>
+</section>
+<div class="dash-info"><span data-icon="info"></span>Os dados e indicadores desta tela são calculados a partir das doações cadastradas.</div>
+
+<section class="kpi-grid" aria-label="Indicadores de impacto">
+  <article class="kpi-card"><span class="big-outline" data-icon="package"></span><div><strong>{{ metricas.alimentos_doados }} kg</strong><small>Alimentos doados</small></div></article>
+  <article class="kpi-card kpi-1"><span class="big-outline" data-icon="utensils"></span><div><strong>{{ metricas.refeicoes }}</strong><small>Refeições estimadas</small></div></article>
+  <article class="kpi-card kpi-2"><span class="big-outline" data-icon="leaf"></span><div><strong>{{ metricas.desperdicio }} kg</strong><small>Desperdício evitado</small></div></article>
+  <article class="kpi-card kpi-3"><span class="big-outline" data-icon="heart"></span><div><strong>{{ metricas.doacoes_realizadas }}</strong><small>Doações realizadas</small></div></article>
+</section>
+
+<section class="dash-grid dashboard-overview">
+  <article class="dash-card chart-card">
+    <header class="card-heading"><h2>Evolução das doações</h2><span class="trend">+18%</span></header>
+    <div class="chart-wrap dashboard-line-chart" role="img" aria-label="Gráfico crescente de doações nos últimos seis meses">
+      <svg viewBox="0 0 640 260" aria-hidden="true"><defs><linearGradient id="areaPainel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f972f" stop-opacity=".26"/><stop offset="1" stop-color="#0f972f" stop-opacity="0"/></linearGradient></defs><g class="chart-grid-lines"><path d="M55 35H620M55 90H620M55 145H620M55 200H620"/></g><path class="chart-area" d="M55 185L160 135L255 150L355 96L460 62L570 32V210H55Z"/><path class="chart-line" d="M55 185L160 135L255 150L355 96L460 62L570 32"/><g class="chart-points"><circle cx="55" cy="185" r="5"/><circle cx="160" cy="135" r="5"/><circle cx="255" cy="150" r="5"/><circle cx="355" cy="96" r="5"/><circle cx="460" cy="62" r="5"/><circle cx="570" cy="32" r="5"/></g><g class="chart-labels"><text x="45" y="235">Mar</text><text x="150" y="235">Abr</text><text x="245" y="235">Mai</text><text x="345" y="235">Jun</text><text x="450" y="235">Jul</text><text x="560" y="235">Ago</text></g></svg>
+    </div>
+  </article>
+
+  <article class="dash-card nearby-card">
+    <header class="card-heading"><h2>Doações disponíveis próximas</h2><a href="{% url 'doacoes_disponiveis' %}">Ver todas</a></header>
+    {% for doacao in proximas %}
+      <a class="mini-donation" href="{% url 'doacao_detalhe' doacao.pk %}"><img src="{{ doacao.foto_url }}" alt="{{ doacao.nome_alimento }}"><span><strong>{{ doacao.nome_alimento }}</strong><small>{{ doacao.doador.perfil_ifeed.organizacao|default:doacao.doador.get_full_name }}</small><small><i data-icon="map-pin"></i>{{ forloop.counter|add:8 }}00 m</small></span><span class="status-pill">Disponível</span></a>
+    {% empty %}<div class="empty-state">Nenhuma doação disponível agora.</div>{% endfor %}
+  </article>
+
+  <article class="dash-card activity-card">
+    <h2>Atividades recentes</h2>
+    {% for doacao in recentes %}
+      <div class="activity"><span data-icon="{% if doacao.status == 'entregue' %}heart{% elif doacao.status == 'coletada' %}clipboard-check{% else %}package{% endif %}"></span><div><strong>{{ doacao.nome_alimento }}</strong><small>{{ doacao.get_status_display }} · {{ doacao.quantidade_formatada }}</small></div><time>{{ doacao.atualizado_em|date:'d/m/Y' }}</time></div>
+    {% empty %}<div class="empty-state">Cadastre sua primeira doação para iniciar o histórico.</div>{% endfor %}
+  </article>
+
+  <article class="dash-card current-badge">
+    <h2>Seu selo atual</h2>
+    <div><img src="{% static 'assets/img/badge-bronze.png' %}" alt="Selo Bronze"><div><h3>Bronze · Primeiro impacto</h3><p>Parabéns! Você está gerando impacto e construindo um futuro com menos desperdício.</p><span class="progress"><span style="width:72%"></span></span><strong>72% concluído</strong><small>Próxima meta: <b>Prata</b></small></div></div>
+  </article>
+</section>
+{% endblock %}

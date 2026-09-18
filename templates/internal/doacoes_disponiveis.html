@@ -1,0 +1,33 @@
+{% extends 'base_internal.html' %}
+{% load static %}
+{% block title %}Doações disponíveis{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+{% endblock %}
+{% block content %}
+<section class="dash-title-row"><div><span class="dash-tag">Rede iFeed</span><h1>Doações disponíveis</h1><p>Encontre alimentos próprios para consumo perto da sua localização.</p></div><button class="btn btn-outline" type="button" data-location-button><span data-icon="map-pin"></span>Usar minha localização</button></section>
+<div class="dash-info"><span>ⓘ</span> As distâncias são demonstrativas; os alimentos exibidos são registros do banco de dados.</div>
+<form class="filter-row" method="get"><label><span>⌕</span><input name="q" value="{{ busca }}" placeholder="Buscar por alimento ou estabelecimento" aria-label="Buscar doações"></label><button class="btn btn-outline" type="submit">⌘ Filtrar</button><div class="view-buttons"><button class="active" type="button">☷ Lista + mapa</button><button type="button">◇ Mapa</button></div></form>
+<div class="chips"><button type="button">Até 5 km ×</button><button type="button">Validade próxima ×</button><button type="button">Refrigerado ×</button><button type="button">Disponível agora ×</button></div>
+
+<section class="available-layout">
+  <div class="available-list">
+    {% for doacao in doacoes %}
+      <article class="donation-result {% if forloop.first %}selected{% endif %}">
+        <img src="{{ doacao.foto_url }}" alt="{{ doacao.nome_alimento }}">
+        <div><h3>{{ doacao.nome_alimento }}</h3><p>{{ doacao.doador.perfil_ifeed.organizacao|default:doacao.doador.get_full_name }}</p><span><i data-icon="package"></i>{{ doacao.quantidade_formatada }}</span><span><i data-icon="calendar"></i>Validade: {{ doacao.data_validade|date:'d/m' }}</span></div>
+        <div><span class="status-pill {% if doacao.esta_urgente %}status-urgente{% endif %}">{% if doacao.esta_urgente %}Urgente{% else %}Disponível{% endif %}</span><a href="{% url 'doacao_detalhe' doacao.pk %}">Ver detalhes</a></div>
+      </article>
+    {% empty %}<div class="dash-card empty-state"><h2>Nenhuma doação encontrada</h2><p>Tente outra busca ou volte mais tarde.</p></div>{% endfor %}
+    <nav class="pagination" aria-label="Paginação"><button type="button">‹</button><button class="active" type="button">1</button><button type="button">2</button><button type="button">3</button><button type="button">›</button></nav>
+  </div>
+  <div class="map-panel" aria-label="Mapa das doações disponíveis">
+    <div id="donation-map" data-mapa-url="{% url 'mapa_doacoes_dados' %}{% if busca %}?q={{ busca|urlencode }}{% endif %}"></div>
+    <div class="map-legend"><span><i></i>Disponível</span><span><i class="urgent"></i>Urgente</span></div>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+<script src="{% static 'js/mapa-doacoes.js' %}" defer></script>
+{% endblock %}

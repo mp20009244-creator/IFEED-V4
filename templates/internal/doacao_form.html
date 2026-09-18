@@ -1,0 +1,23 @@
+{% extends 'base_internal.html' %}
+{% load static %}
+{% block title %}{% if editando %}Editar doação{% else %}Nova doação{% endif %}{% endblock %}
+{% block content %}
+<a class="back-dashboard" href="{% url 'minhas_doacoes' %}">← Voltar para minhas doações</a>
+<section class="dash-title-row"><div><span class="dash-tag">Doação responsável</span><h1>{% if editando %}Editar doação{% else %}Cadastrar nova doação{% endif %}</h1><p>Informe os alimentos, a retirada e o endereço com clareza.</p></div></section>
+<form class="new-donation-form" method="post" enctype="multipart/form-data" novalidate>{% csrf_token %}
+  {% if form.non_field_errors %}<div class="form-alert span-all">{{ form.non_field_errors }}</div>{% endif %}
+  <section class="dash-card donation-fields"><h2>Informações do alimento</h2><div class="input-grid">
+    {% for field in form %}{% if field.name != 'foto' and field.name != 'cep' and field.name != 'logradouro' and field.name != 'numero' and field.name != 'complemento' and field.name != 'bairro' and field.name != 'cidade' and field.name != 'estado' and field.name != 'alimento_proprio' and field.name != 'latitude' and field.name != 'longitude' %}<label class="{% if field.name == 'descricao' %}span-2{% endif %}" for="{{ field.id_for_label }}">{{ field.label }}{{ field }}{{ field.errors }}{% if field.help_text %}<small>{{ field.help_text|safe }}</small>{% endif %}</label>{% endif %}{% endfor %}
+  </div></section>
+  <aside class="dash-card photo-upload"><h2>Foto do alimento</h2><img id="photo-preview" src="{% if doacao %}{{ doacao.foto_url }}{% else %}{% static 'assets/img/hero-food-box.png' %}{% endif %}" alt="Prévia da doação"><label class="btn btn-outline" for="{{ form.foto.id_for_label }}">Escolher imagem</label>{{ form.foto }}{{ form.foto.errors }}<p>JPG, PNG ou WebP, com até 5 MB.</p></aside>
+  <section class="dash-card donation-address"><h2>Endereço de retirada</h2><div class="input-grid"><label for="{{ form.cep.id_for_label }}">{{ form.cep.label }}{{ form.cep }}{{ form.cep.errors }}<small id="cep-feedback">Consulte automaticamente pela ViaCEP.</small></label><label for="{{ form.logradouro.id_for_label }}">{{ form.logradouro.label }}{{ form.logradouro }}{{ form.logradouro.errors }}</label><label for="{{ form.numero.id_for_label }}">{{ form.numero.label }}{{ form.numero }}{{ form.numero.errors }}</label><label for="{{ form.complemento.id_for_label }}">{{ form.complemento.label }}{{ form.complemento }}{{ form.complemento.errors }}</label><label for="{{ form.bairro.id_for_label }}">{{ form.bairro.label }}{{ form.bairro }}{{ form.bairro.errors }}</label><label for="{{ form.cidade.id_for_label }}">{{ form.cidade.label }}{{ form.cidade }}{{ form.cidade.errors }}</label><label for="{{ form.estado.id_for_label }}">{{ form.estado.label }}{{ form.estado }}{{ form.estado.errors }}</label><label class="terms-check span-2" for="{{ form.alimento_proprio.id_for_label }}">{{ form.alimento_proprio }} {{ form.alimento_proprio.label }}{{ form.alimento_proprio.errors }}</label></div></section>
+  <section class="dash-card">
+    <h2>Localização no mapa (opcional)</h2>
+    <p>Registre a localização para que a doação apareça no mapa de doações disponíveis.</p>
+    <button type="button" class="btn btn-outline" id="doacao-location-button">Usar minha localização atual</button>
+    <span id="doacao-location-status" style="margin-left:0.75rem;font-size:0.9rem;"></span>
+    {{ form.latitude }}{{ form.longitude }}
+  </section>
+  <div class="donation-form-actions"><a class="btn btn-outline" href="{% url 'minhas_doacoes' %}">Cancelar</a><button class="btn btn-primary" type="submit">{% if editando %}Salvar alterações{% else %}Publicar doação{% endif %}</button></div>
+</form>
+{% endblock %}

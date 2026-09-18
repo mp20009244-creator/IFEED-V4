@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Entre no iFeed para cadastrar doações, organizar coletas e acompanhar seu impacto.">
+  <title>Entrar | iFeed</title>
+  <link rel="stylesheet" href="{% static 'css/ifeed.css' %}">
+  <link rel="stylesheet" href="{% static 'css/django-extra.css' %}">
+</head>
+<body class="auth-page">
+  <main class="auth-shell auth-login-shell">
+    <a class="auth-logo logo" href="{% url 'home' %}" aria-label="Voltar ao início">
+      <img src="{% static 'assets/img/logo-ifeed.png' %}" alt="Logo iFeed">
+    </a>
+
+    <section class="auth-visual" aria-label="Apresentação do iFeed">
+      <a class="back-link" href="{% url 'home' %}"><span data-icon="arrow-left"></span>Voltar para o início</a>
+      <div class="auth-copy">
+        <h1>Transforme<br>alimentos em<br><em>esperança.</em></h1>
+        <p>Entre para conectar doações, organizar coletas e acompanhar o impacto gerado.</p>
+      </div>
+      <img class="login-photo" src="{% static 'assets/img/login-food.png' %}" alt="Caixa com pães, legumes e verduras">
+      <div class="auth-benefits" aria-label="Benefícios da plataforma">
+        <div><span class="auth-icon" data-icon="heart"></span><span>Doe com<br>facilidade</span></div>
+        <div><span class="auth-icon" data-icon="map-pin"></span><span>Encontre alimentos<br>próximos</span></div>
+        <div><span class="auth-icon" data-icon="clipboard-check"></span><span>Acompanhe<br>cada entrega</span></div>
+      </div>
+    </section>
+
+    <section class="auth-form">
+      <div class="auth-form-inner">
+        <span class="section-tag"><span data-icon="lock"></span>Acesso seguro</span>
+        <h2>Bem-vindo ao iFeed</h2>
+        <p>Entre com seu e-mail e senha para acessar a plataforma.</p>
+
+        {% include 'includes/messages.html' %}
+
+        <form class="django-auth-form" method="post" novalidate>
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.GET.next }}">
+          {% if form.non_field_errors %}<div class="form-alert">{{ form.non_field_errors }}</div>{% endif %}
+          <label for="{{ form.identificador.id_for_label }}">{{ form.identificador.label }}</label>
+          {{ form.identificador }}
+          {{ form.identificador.errors }}
+          <label for="{{ form.senha.id_for_label }}">{{ form.senha.label }}</label>
+          {{ form.senha }}
+          {{ form.senha.errors }}
+          <label class="remember"><input type="checkbox" name="lembrar"> Lembrar meu acesso neste dispositivo</label>
+          <button class="btn btn-primary btn-full auth-submit" type="submit">Entrar na plataforma</button>
+        </form>
+
+        <div class="security-note"><span class="auth-icon small" data-icon="shield"></span><span>Suas credenciais são protegidas pelo sistema de autenticação do iFeed.</span></div>
+        <p class="auth-switch">Ainda não tem uma conta? <a href="{% url 'cadastro' %}">Cadastre-se</a></p>
+        <div class="auth-footer"><span>Termos de uso</span><span>Política de privacidade</span><span>© 2026 iFeed</span></div>
+      </div>
+    </section>
+  </main>
+  <script src="{% static 'js/icons.js' %}" defer></script>
+  <script src="{% static 'js/site.js' %}" defer></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Área interna{% endblock %} | iFeed</title>
+  <link rel="icon" type="image/png" href="{% static 'favicon.png' %}">
+  <link rel="stylesheet" href="{% static 'css/ifeed.css' %}">
+  <link rel="stylesheet" href="{% static 'css/django-extra.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <div class="dashboard-app">
+    <aside class="sidebar" id="sidebar">
+      <div class="side-logo"><a class="logo logo-compact" href="{% url 'painel' %}"><img src="{% static 'assets/img/logo-ifeed.png' %}" alt="iFeed"></a></div>
+      <nav aria-label="Menu da plataforma">
+        <a href="{% url 'painel' %}" class="{% if request.resolver_match.url_name == 'painel' %}active{% endif %}"><span class="nav-symbol" data-icon="home"></span><span>Painel</span></a>
+        <a href="{% url 'doacoes_disponiveis' %}" class="{% if request.resolver_match.url_name == 'doacoes_disponiveis' or request.resolver_match.url_name == 'doacao_detalhe' %}active{% endif %}"><span class="nav-symbol" data-icon="map-pin"></span><span>Doações disponíveis</span></a>
+        <a href="{% url 'minhas_coletas' %}" class="{% if request.resolver_match.url_name == 'minhas_coletas' %}active{% endif %}"><span class="nav-symbol" data-icon="clipboard-check"></span><span>Minhas coletas</span></a>
+        <a href="{% url 'minhas_doacoes' %}" class="{% if request.resolver_match.url_name == 'minhas_doacoes' or request.resolver_match.url_name == 'doacao_criar' or request.resolver_match.url_name == 'doacao_editar' %}active{% endif %}"><span class="nav-symbol" data-icon="package"></span><span>Minhas doações</span></a>
+        <a href="{% url 'impacto' %}" class="{% if request.resolver_match.url_name == 'impacto' %}active{% endif %}"><span class="nav-symbol" data-icon="chart"></span><span>Impacto</span></a>
+        <a href="{% url 'reconhecimentos' %}" class="{% if request.resolver_match.url_name == 'reconhecimentos' %}active{% endif %}"><span class="nav-symbol" data-icon="award"></span><span>Reconhecimentos</span></a>
+        <a href="{% url 'perfil' %}" class="{% if request.resolver_match.url_name == 'perfil' %}active{% endif %}"><span class="nav-symbol" data-icon="user"></span><span>Perfil</span></a>
+      </nav>
+      <form method="post" action="{% url 'logout' %}" class="logout-form">
+        {% csrf_token %}
+        <button class="side-logout" type="submit"><span class="nav-symbol" data-icon="log-out"></span>Sair</button>
+      </form>
+    </aside>
+    <button class="drawer-backdrop" id="drawer-backdrop" aria-label="Fechar menu" hidden></button>
+    <div class="dashboard-main">
+      <header class="dashboard-topbar">
+        <button class="dash-menu" id="dash-menu" type="button" aria-label="Abrir menu"><span data-icon="menu"></span></button>
+        <label class="top-search"><span data-icon="search"></span><input placeholder="Digite um endereço" aria-label="Digite um endereço"></label>
+        <div class="top-user">
+          <button class="bell-button" id="bell-button" type="button" aria-label="Notificações"><span data-icon="bell"></span><i></i></button>
+          <img src="{% if perfil_ifeed.foto_url %}{{ perfil_ifeed.foto_url }}{% else %}{% static 'assets/img/avatar-carlos.png' %}{% endif %}" alt="{{ request.user.get_full_name|default:request.user.username }}">
+          <a href="{% url 'perfil' %}" aria-label="Abrir perfil"><span data-icon="chevron-down"></span></a>
+          <div class="notification-pop" id="notification-pop" hidden><strong>Notificações</strong><p>Bem-vindo à plataforma iFeed.</p><p>Confira suas coletas e doações recentes.</p></div>
+        </div>
+      </header>
+      {% include 'includes/messages.html' %}
+      <main class="dashboard-content">{% block content %}{% endblock %}</main>
+    </div>
+  </div>
+  <script src="{% static 'js/icons.js' %}" defer></script>
+  <script src="{% static 'js/site.js' %}" defer></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

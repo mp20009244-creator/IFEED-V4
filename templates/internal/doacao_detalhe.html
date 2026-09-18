@@ -1,0 +1,24 @@
+{% extends 'base_internal.html' %}
+{% load static %}
+{% block title %}{{ doacao.nome_alimento }}{% endblock %}
+{% block content %}
+<a class="back-dashboard" href="{% url 'doacoes_disponiveis' %}">← Voltar para doações</a>
+<section class="detail-page-grid">
+  <article class="dash-card donation-detail-main">
+    <img class="detail-cover" src="{{ doacao.foto_url }}" alt="{{ doacao.nome_alimento }}">
+    <div class="detail-title"><div><span class="status-pill status-{{ doacao.status }}">{{ doacao.get_status_display }}</span><h1>{{ doacao.nome_alimento }}</h1><p>{{ doacao.doador.perfil_ifeed.organizacao|default:doacao.doador.get_full_name }}</p></div><strong>{{ doacao.quantidade_formatada }}</strong></div>
+    <div class="detail-specs"><div><span class="line-icon" data-icon="calendar"></span><span><small>Validade</small><strong>{{ doacao.data_validade|date:'d/m/Y' }}</strong></span></div><div><span class="line-icon" data-icon="package"></span><span><small>Armazenamento</small><strong>{{ doacao.get_tipo_armazenamento_display }}</strong></span></div><div><span class="line-icon" data-icon="clock"></span><span><small>Retirada</small><strong>{{ doacao.horario_inicio|time:'H:i' }}–{{ doacao.horario_fim|time:'H:i' }}</strong></span></div><div><span class="line-icon" data-icon="map-pin"></span><span><small>Cidade</small><strong>{{ doacao.cidade }} — {{ doacao.estado }}</strong></span></div></div>
+    <h2>Descrição</h2><p>{{ doacao.descricao|default:'Alimentos selecionados e em boas condições para consumo.' }}</p>
+    <h2>Local da retirada</h2><p class="icon-copy"><span data-icon="map-pin"></span>{{ doacao.endereco_resumido }}</p>
+    <div class="detail-map" style="background-image:url('{% static 'assets/img/map-sao-paulo.png' %}')"></div>
+  </article>
+  <aside class="dash-card reserve-card">
+    <span class="dash-tag">Reserva segura</span><h2>Reserve esta doação</h2><p>Confirme que sua instituição poderá retirar os alimentos no período informado.</p>
+    <div class="reserve-summary"><span>Quantidade <strong>{{ doacao.quantidade_formatada }}</strong></span><span>Retirada <strong>{{ doacao.horario_inicio|time:'H:i' }}–{{ doacao.horario_fim|time:'H:i' }}</strong></span><span>Doador <strong>{{ doacao.doador.perfil_ifeed.organizacao|default:'Parceiro iFeed' }}</strong></span></div>
+    {% if doacao.status == 'disponivel' and doacao.doador_id != request.user.id %}
+      <form method="post" action="{% url 'reservar_doacao' doacao.pk %}" data-confirm-form="Reservar esta doação?"><input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"><label><input type="checkbox" required> Confirmo que conferirei os alimentos na retirada e respeitarei o horário combinado.</label><button class="btn btn-primary btn-full" type="submit">Reservar doação</button></form>
+    {% elif doacao.doador_id == request.user.id %}<div class="success-box">Esta doação foi publicada por você.</div><a class="btn btn-outline btn-full" href="{% url 'doacao_editar' doacao.pk %}">Editar doação</a>
+    {% else %}<div class="success-box">Esta doação já está {{ doacao.get_status_display|lower }}.</div><a class="btn btn-outline btn-full" href="{% url 'minhas_coletas' %}">Ver minhas coletas</a>{% endif %}
+  </aside>
+</section>
+{% endblock %}

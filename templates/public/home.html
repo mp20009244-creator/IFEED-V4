@@ -1,0 +1,53 @@
+{% extends 'base_public.html' %}
+{% load static %}
+{% block title %}iFeed — Transforme alimentos em esperança{% endblock %}
+{% block body_class %}home-page{% endblock %}
+{% block content %}
+<section class="home-hero container-wide">
+  <div class="hero-copy">
+    <span class="concept-pill concept-pill-home"><img src="{% static 'assets/icons/concept/home-tag.png' %}" alt="" aria-hidden="true"><span>Juntos contra o desperdício</span></span>
+    <h1>Transforme<br>alimentos em <em>esperança.</em></h1>
+    <p>Conectamos doadores a instituições que levam alimentação para quem mais precisa.</p>
+    <div class="button-row"><a class="btn btn-primary" href="{% url 'cadastro' %}?perfil=doador">Quero doar</a><a class="btn btn-outline" href="{% url 'cadastro' %}?perfil=recebedor">Quero receber</a></div>
+  </div>
+  <div class="hero-visual"><img src="{% static 'assets/img/hero-food-box.png' %}" alt="Caixa com pães, verduras e legumes frescos sendo entregue"></div>
+</section>
+<section class="benefit-strip container-wide" aria-label="Benefícios do iFeed">
+  <div><img class="concept-benefit-icon" src="{% static 'assets/icons/concept/home-benefit-waste.png' %}" alt="" aria-hidden="true"><span>Reduza o desperdício<br>de alimentos</span></div>
+  <div><img class="concept-benefit-icon" src="{% static 'assets/icons/concept/home-benefit-community.png' %}" alt="" aria-hidden="true"><span>Ajude quem mais<br>precisa</span></div>
+  <div><img class="concept-benefit-icon" src="{% static 'assets/icons/concept/home-benefit-impact.png' %}" alt="" aria-hidden="true"><span>Gere impacto positivo na<br>sua comunidade</span></div>
+</section>
+<section class="impact-band container-wide">
+  <h2>Impacto que transforma</h2>
+  <div class="public-stats dark">
+    <div class="public-stat"><img class="concept-stat-icon" src="{% static 'assets/icons/concept/home-stat-food.png' %}" alt="" aria-hidden="true"><div><strong>12.580 kg</strong><small>Alimentos doados*</small></div></div>
+    <div class="public-stat"><img class="concept-stat-icon" src="{% static 'assets/icons/concept/home-stat-meals.png' %}" alt="" aria-hidden="true"><div><strong>25.160</strong><small>Refeições estimadas*</small></div></div>
+    <div class="public-stat"><img class="concept-stat-icon" src="{% static 'assets/icons/concept/home-stat-waste.png' %}" alt="" aria-hidden="true"><div><strong>8.320 kg</strong><small>Desperdício evitado*</small></div></div>
+    <div class="public-stat"><img class="concept-stat-icon" src="{% static 'assets/icons/concept/home-stat-institutions.png' %}" alt="" aria-hidden="true"><div><strong>340</strong><small>Instituições atendidas*</small></div></div>
+  </div>
+  <p class="demo-copy">* Indicadores demonstrativos do protótipo.</p>
+</section>
+<section class="public-section container-wide">
+  <div class="section-heading"><div><h2>Como funciona</h2><h3>Uma conexão simples. Um impacto enorme.</h3></div><p>Cada etapa da doação é organizada para ser rápida, transparente e segura.</p></div>
+  <div class="journey">
+    <div class="journey-step"><div class="journey-icon journey-icon-art"><span>01</span><img src="{% static 'assets/icons/concept/journey-register-3d.png' %}" alt="" aria-hidden="true"></div><h3>Cadastrar doação</h3><p>Informe o alimento, a quantidade e o local de retirada.</p></div>
+    <div class="journey-step"><div class="journey-icon journey-icon-art"><span>02</span><img src="{% static 'assets/icons/concept/journey-find-3d.png' %}" alt="" aria-hidden="true"></div><h3>Encontrar</h3><p>Instituições visualizam as doações próximas.</p></div>
+    <div class="journey-step"><div class="journey-icon journey-icon-art"><span>03</span><img src="{% static 'assets/icons/concept/journey-reserve-3d.png' %}" alt="" aria-hidden="true"></div><h3>Reservar</h3><p>A instituição reserva e confirma a necessidade.</p></div>
+    <div class="journey-step"><div class="journey-icon journey-icon-art"><span>04</span><img src="{% static 'assets/icons/concept/journey-deliver-3d.png' %}" alt="" aria-hidden="true"></div><h3>Coletar e entregar</h3><p>A retirada é combinada com o estabelecimento.</p></div>
+    <div class="journey-step"><div class="journey-icon journey-icon-art"><span>05</span><img src="{% static 'assets/icons/concept/journey-impact-3d.png' %}" alt="" aria-hidden="true"></div><h3>Gerar impacto</h3><p>A entrega alimenta pessoas e reduz o desperdício.</p></div>
+  </div>
+  <div class="center-actions"><a class="btn btn-primary" href="{% url 'cadastro' %}?perfil=doador">Cadastrar uma doação</a><a class="btn btn-outline" href="{% url 'doacoes_disponiveis' %}">Encontrar doações</a><a class="text-link" href="{% url 'como_funciona' %}">Entender a jornada →</a></div>
+</section>
+<section class="public-section why-section container-wide">
+  <div><span class="green-kicker">Por que iFeed</span><h2>Tecnologia a serviço<br>de <em>quem tem fome.</em></h2><p>Organizamos a conexão entre quem pode doar e quem já atua no cuidado das comunidades.</p>
+    <div class="feature-grid">
+      <div><span class="feature-icon"><img src="{% static 'assets/icons/concept/env-reduce.png' %}" alt="" aria-hidden="true"></span><div><h3>Sustentabilidade</h3><p>Uso consciente dos recursos e menos desperdício.</p></div></div>
+      <div><span class="feature-icon"><img src="{% static 'assets/icons/concept/env-use-food.png' %}" alt="" aria-hidden="true"></span><div><h3>Combate à fome</h3><p>Alimentos adequados chegando a quem mais precisa.</p></div></div>
+      <div><span class="feature-icon"><img src="{% static 'assets/icons/concept/env-shared-responsibility.png' %}" alt="" aria-hidden="true"></span><div><h3>Responsabilidade social</h3><p>Comunidades e iniciativas fortalecidas.</p></div></div>
+      <div><span class="feature-icon"><img src="{% static 'assets/icons/concept/env-responsible-consumption.png' %}" alt="" aria-hidden="true"></span><div><h3>Impacto ambiental</h3><p>Menos emissões e melhor destino aos alimentos.</p></div></div>
+    </div>
+  </div>
+  <div class="organic-photo"><img class="organic-leaf-accent" src="{% static 'assets/icons/concept/env-reduce.png' %}" alt="" aria-hidden="true"><span class="organic-yellow-accent" aria-hidden="true"></span><div class="organic-photo-frame"><img src="{% static 'assets/img/community-team.png' %}" alt="Voluntários do iFeed organizando alimentos"></div></div>
+</section>
+<section class="final-cta container-wide"><div><h2>Pronto para transformar<br>alimentos em <em>esperança?</em></h2><p>Faça parte de uma rede que aproxima solidariedade, tecnologia e impacto social.</p><div class="button-row"><a class="btn btn-yellow" href="{% url 'cadastro' %}?perfil=doador">Quero doar</a><a class="btn btn-dark-outline" href="{% url 'cadastro' %}?perfil=recebedor">Sou uma instituição</a></div></div><div class="final-cta-photo"><img src="{% static 'assets/img/community-delivery.png' %}" alt="Entrega de uma caixa de alimentos"></div></section>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Crie sua conta no iFeed para doar ou receber alimentos e acompanhar o impacto social.">
+  <title>Cadastro | iFeed</title>
+  <link rel="stylesheet" href="{% static 'css/ifeed.css' %}">
+  <link rel="stylesheet" href="{% static 'css/django-extra.css' %}">
+</head>
+<body class="auth-page">
+  <main class="auth-shell auth-register-shell">
+    <a class="auth-logo logo" href="{% url 'home' %}" aria-label="Voltar ao início">
+      <img src="{% static 'assets/img/logo-ifeed.png' %}" alt="Logo iFeed">
+    </a>
+
+    <section class="auth-visual" aria-label="Apresentação do cadastro">
+      <a class="back-link" href="{% url 'home' %}"><span data-icon="arrow-left"></span>Voltar para o início</a>
+      <div class="auth-copy">
+        <h1>Faça parte<br>da rede que<br><em>alimenta.</em></h1>
+        <p>Crie sua conta em poucos minutos e comece a doar ou receber alimentos com segurança.</p>
+      </div>
+      <img class="login-photo" src="{% static 'assets/img/signup-people.png' %}" alt="Pessoas participando de ações solidárias">
+    </section>
+
+    <section class="auth-form">
+      <div class="auth-form-inner register-form">
+        <span class="section-tag"><span data-icon="user"></span>Crie sua conta</span>
+        <h2>Comece sua jornada no iFeed</h2>
+        <p>Cadastre os dados básicos e escolha como você quer participar.</p>
+        {% include 'includes/messages.html' %}
+
+        <form class="django-auth-form" method="post" novalidate>
+          {% csrf_token %}
+          {% if form.non_field_errors %}<div class="form-alert">{{ form.non_field_errors }}</div>{% endif %}
+          <h3>Como você quer participar?</h3>
+          <div class="role-grid" data-role-grid>
+            <label class="role-card {% if form.tipo.value != 'recebedor' %}selected{% endif %}" data-role="doador">
+              <input type="radio" name="tipo" value="doador" {% if form.tipo.value != 'recebedor' %}checked{% endif %}>
+              <span class="auth-icon" data-icon="heart"></span><span><strong>Quero doar</strong><small>Restaurante, padaria, mercado, hortifruti, lanchonete ou pessoa física.</small></span><i></i>
+            </label>
+            <label class="role-card {% if form.tipo.value == 'recebedor' %}selected{% endif %}" data-role="recebedor">
+              <input type="radio" name="tipo" value="recebedor" {% if form.tipo.value == 'recebedor' %}checked{% endif %}>
+              <span class="auth-icon" data-icon="users"></span><span><strong>Quero receber</strong><small>ONG, banco de alimentos, projeto social, instituição ou voluntário.</small></span><i></i>
+            </label>
+          </div>
+          {{ form.tipo.errors }}
+
+          <div class="form-grid register-grid">
+            <label class="span-2" for="{{ form.nome.id_for_label }}">{{ form.nome.label }}{{ form.nome }}{{ form.nome.errors }}</label>
+            <label class="span-2" for="{{ form.email.id_for_label }}">{{ form.email.label }}{{ form.email }}{{ form.email.errors }}</label>
+            <label for="{{ form.organizacao.id_for_label }}">{{ form.organizacao.label }}{{ form.organizacao }}{{ form.organizacao.errors }}</label>
+            <label for="{{ form.telefone.id_for_label }}">{{ form.telefone.label }}{{ form.telefone }}{{ form.telefone.errors }}</label>
+            <label for="{{ form.cep.id_for_label }}">{{ form.cep.label }}{{ form.cep }}{{ form.cep.errors }}<small id="cep-feedback">Preenchimento automático pela ViaCEP</small></label>
+            <label for="{{ form.cidade.id_for_label }}">{{ form.cidade.label }}{{ form.cidade }}{{ form.cidade.errors }}</label>
+            <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}{{ form.password1 }}{{ form.password1.errors }}</label>
+            <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }}{{ form.password2 }}{{ form.password2.errors }}</label>
+          </div>
+          <label class="terms-check">{{ form.aceite_termos }} <span>Li e aceito os <a href="#">Termos de uso</a> e a <a href="#">Política de privacidade</a>.</span></label>{{ form.aceite_termos.errors }}
+          <button class="btn btn-primary btn-full auth-submit" type="submit">Criar meu perfil</button>
+        </form>
+        <p class="auth-switch">Já possui uma conta? <a href="{% url 'login' %}">Entrar</a></p>
+        <div class="auth-footer"><span>© 2026 iFeed</span></div>
+      </div>
+    </section>
+  </main>
+  <script src="{% static 'js/icons.js' %}" defer></script>
+  <script src="{% static 'js/site.js' %}" defer></script>
+</body>
+</html>

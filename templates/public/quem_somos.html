@@ -1,0 +1,58 @@
+{% extends 'base_public.html' %}
+{% load static %}
+{% block title %}Quem somos | iFeed{% endblock %}
+{% block body_class %}about-page{% endblock %}
+{% block content %}
+<section class="about-hero container-wide">
+  <div>
+    <span class="section-tag"><span data-icon="users"></span>Quem somos</span>
+    <h1>Uma ideia acadêmica<br>criada para aproximar<br><em>alimento, solidariedade<br>e esperança.</em></h1>
+    <h3>Nossa história</h3>
+    <p>O iFeed surgiu da observação de dois problemas que convivem nas mesmas cidades: alimentos próprios para consumo são descartados enquanto pessoas e famílias enfrentam insegurança alimentar.</p>
+    <p>A tecnologia pode reduzir a distância entre quem deseja doar e quem já trabalha para distribuir.</p>
+  </div>
+  <div class="about-hero-photo"><img src="{% static 'assets/img/team-workshop.png' %}" alt="Equipe do projeto iFeed desenvolvendo a plataforma"></div>
+</section>
+
+<section class="mission-section container-wide">
+  <div class="why-created">
+    <h3>Por que criamos o iFeed</h3>
+    <p>Muitos estabelecimentos querem doar, mas não sabem como encontrar instituições confiáveis nem organizar cadastro, reserva, retirada e acompanhamento.</p>
+  </div>
+  <h2>Missão, visão e valores</h2>
+  <div class="mission-grid">
+    <article><img src="{% static 'assets/icons/concept/about-mission.png' %}" alt="" aria-hidden="true"><h3>Missão</h3><p>Conectar doadores a instituições e voluntários, tornando a doação mais simples, organizada, segura e transparente.</p></article>
+    <article><img src="{% static 'assets/icons/concept/about-vision.png' %}" alt="" aria-hidden="true"><h3>Visão</h3><p>Contribuir para uma rede nacional capaz de reduzir o desperdício e ampliar o apoio às comunidades.</p></article>
+    <article><img src="{% static 'assets/icons/concept/about-values.png' %}" alt="" aria-hidden="true"><h3>Valores</h3><p>Solidariedade, responsabilidade, transparência, respeito, sustentabilidade, inclusão e tecnologia com propósito.</p></article>
+  </div>
+</section>
+
+<section class="team-section container-wide">
+  <span class="green-kicker">Quem constrói o iFeed</span>
+  <h2>Um projeto integrador desenvolvido por pessoas que acreditam em tecnologia com propósito.</h2>
+  <div class="team-grid">
+    {% for numero in '1234' %}
+    <article>
+      <div class="team-avatar avatar-{{ numero }}"><span>Integrante</span></div>
+      <h3>Nome do integrante</h3>
+      <strong>Função no projeto</strong>
+      <p>Breve apresentação do integrante e de sua contribuição para o iFeed.</p>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="audience-section container-wide">
+  <div class="audience-copy">
+    <span class="green-kicker">Para quem construímos</span>
+    <h2>Uma rede feita para<br><em>pessoas reais.</em></h2>
+    <div class="audience-network">
+      <article class="audience-card donors"><img src="{% static 'assets/icons/concept/about-donors.png' %}" alt="" aria-hidden="true"><div><h3>Doadores</h3><p>Restaurantes, padarias, supermercados, hortifrutis, lanchonetes e pessoas físicas.</p></div></article>
+      <img class="audience-network-icon" src="{% static 'assets/icons/concept/about-network.png' %}" alt="Símbolo do iFeed conectando doadores e recebedores">
+      <article class="audience-card receivers"><img src="{% static 'assets/icons/concept/about-receivers.png' %}" alt="" aria-hidden="true"><div><h3>Recebedores</h3><p>ONGs, bancos de alimentos, projetos sociais, instituições, voluntários e redes comunitárias.</p></div></article>
+    </div>
+    <p class="center-copy">O iFeed aproxima os dois lados sem retirar a responsabilidade de cada participante.</p>
+  </div>
+  <div class="audience-photo"><img src="{% static 'assets/img/community-delivery.png' %}" alt="Doadora e representante de uma comunidade compartilhando alimentos"></div>
+</section>
+{% endblock %}

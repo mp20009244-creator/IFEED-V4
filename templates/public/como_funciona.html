@@ -1,0 +1,105 @@
+{% extends 'base_public.html' %}
+{% load static %}
+{% block title %}Como funciona | iFeed{% endblock %}
+{% block body_class %}how-page{% endblock %}
+{% block content %}
+<section class="public-intro container-wide">
+  <span class="section-tag"><span data-icon="leaf"></span>Uma conexão simples</span>
+  <div class="intro-row">
+    <div>
+      <h1>Do alimento disponível<br>ao <em>impacto na comunidade.</em></h1>
+      <p>O iFeed organiza cada etapa da doação para aproximar quem pode ajudar de quem mais precisa.</p>
+    </div>
+    <div class="button-row">
+      <a class="btn btn-primary" href="{% url 'cadastro' %}?perfil=doador">Quero doar</a>
+      <a class="btn btn-outline" href="{% url 'cadastro' %}?perfil=recebedor">Quero receber</a>
+    </div>
+  </div>
+
+  <div class="journey detailed" aria-label="Etapas da jornada de doação">
+    <article class="journey-step">
+      <div class="journey-icon journey-icon-outline"><span>01</span><img src="{% static 'assets/icons/concept/journey-register-outline.png' %}" alt="" aria-hidden="true"></div>
+      <h3>Cadastrar</h3><p>Crie seu cadastro como doador ou instituição e informe o que pode doar ou receber.</p>
+    </article>
+    <article class="journey-step">
+      <div class="journey-icon journey-icon-outline"><span>02</span><img src="{% static 'assets/icons/concept/journey-find-outline.png' %}" alt="" aria-hidden="true"></div>
+      <h3>Encontrar</h3><p>Veja as doações disponíveis perto de você e filtre por tipo de alimento ou necessidade.</p>
+    </article>
+    <article class="journey-step">
+      <div class="journey-icon journey-icon-outline"><span>03</span><img src="{% static 'assets/icons/concept/journey-reserve-outline.png' %}" alt="" aria-hidden="true"></div>
+      <h3>Reservar</h3><p>Reserve a doação desejada de forma rápida e aguarde a confirmação.</p>
+    </article>
+    <article class="journey-step">
+      <div class="journey-icon journey-icon-outline"><span>04</span><img src="{% static 'assets/icons/concept/journey-deliver-outline.png' %}" alt="" aria-hidden="true"></div>
+      <h3>Coletar e entregar</h3><p>Combine a coleta ou entrega e garanta que os alimentos cheguem ao destino certo.</p>
+    </article>
+    <article class="journey-step">
+      <div class="journey-icon journey-icon-outline"><span>05</span><img src="{% static 'assets/icons/concept/journey-impact-outline.png' %}" alt="" aria-hidden="true"></div>
+      <h3>Gerar impacto</h3><p>Sua doação transforma vidas e fortalece a rede de solidariedade na comunidade.</p>
+    </article>
+  </div>
+</section>
+
+<section class="trust-section container-wide">
+  <div class="trust-card">
+    <div class="trust-heading"><h2>Confiança em cada etapa</h2><p>Responsabilidade também faz parte da conexão.</p></div>
+    <div class="trust-grid">
+      <article><span class="trust-icon"><img src="{% static 'assets/icons/shield.png' %}" alt="" aria-hidden="true"></span><strong>Alimentos próprios<br>para consumo</strong></article>
+      <article><span class="trust-icon"><img src="{% static 'assets/icons/info.png' %}" alt="" aria-hidden="true"></span><strong>Informações claras<br>e atualizadas</strong></article>
+      <article><span class="trust-icon"><img src="{% static 'assets/icons/clipboard-check.png' %}" alt="" aria-hidden="true"></span><strong>Conferência no<br>momento da coleta</strong></article>
+      <article><span class="trust-icon"><img src="{% static 'assets/icons/users.png' %}" alt="" aria-hidden="true"></span><strong>Transparência entre<br>os participantes</strong></article>
+    </div>
+  </div>
+
+  <div class="responsibility-grid">
+    <div>
+      <h3>Quem doa</h3>
+      <p><span data-icon="check"></span>Cadastra o alimento com informações completas.</p>
+      <p><span data-icon="check"></span>Informa quantidade, validade e armazenamento.</p>
+      <p><span data-icon="check"></span>Define local e horário disponíveis para retirada.</p>
+      <p><span data-icon="check"></span>Aguarda a confirmação da reserva.</p>
+      <p><span data-icon="check"></span>Entrega os alimentos conforme combinado.</p>
+    </div>
+    <div>
+      <h3>Quem recebe</h3>
+      <p><span data-icon="check"></span>Localiza doações disponíveis perto da instituição.</p>
+      <p><span data-icon="check"></span>Confere as informações e as condições do alimento.</p>
+      <p><span data-icon="check"></span>Reserva a doação que atende à necessidade.</p>
+      <p><span data-icon="check"></span>Organiza a coleta ou a programação da entrega.</p>
+      <p><span data-icon="check"></span>Confirma o recebimento e ajuda a gerar impacto.</p>
+    </div>
+  </div>
+  <div class="info-note"><span data-icon="info"></span>O iFeed facilita a conexão; cada participante continua responsável pela conferência e pelas regras aplicáveis.</div>
+</section>
+
+<section class="recognition-public container-wide">
+  <div class="recognition-content">
+    <h2>Reconhecimento que incentiva</h2>
+    <p>Cada doação também pode gerar reconhecimento.</p>
+    <div class="mini-badges">
+      <article><img src="{% static 'assets/img/badge-bronze.png' %}" alt="Selo Bronze"><h3>Bronze</h3><strong>a partir de 50 kg</strong><p>✓ Selo no perfil</p><p>✓ Resumo mensal</p><p>✓ Destaque no mapa</p></article>
+      <article><img src="{% static 'assets/img/badge-silver.png' %}" alt="Selo Prata"><h3>Prata</h3><strong>a partir de 200 kg</strong><p>✓ Selo no perfil</p><p>✓ Resumo mensal</p><p>✓ Destaque no mapa</p><p>✓ Relatório de impacto</p></article>
+      <article><img src="{% static 'assets/img/badge-gold.png' %}" alt="Selo Ouro"><h3>Ouro</h3><strong>a partir de 500 kg</strong><p>✓ Selo no perfil</p><p>✓ Resumo mensal</p><p>✓ Destaque no mapa</p><p>✓ Relatório de impacto</p><p>✓ Badge de parceiro</p></article>
+    </div>
+    <div class="future-benefit"><span data-icon="award"></span><strong>Benefícios e descontos com parceiros</strong><span>— evolução futura</span></div>
+  </div>
+  <aside class="certificate-block">
+    <h2>Certificado digital</h2>
+    <img src="{% static 'assets/img/certificate.png' %}" alt="Modelo demonstrativo do certificado digital iFeed">
+    <small>Modelo demonstrativo, sem validade jurídica.</small>
+  </aside>
+</section>
+
+<section class="faq-section container-wide">
+  <h2>Perguntas frequentes</h2>
+  <div class="faq-list">
+    <div class="faq-item"><button type="button">Quem pode doar?<span>−</span></button><p>Empresas, comércios, indústrias, produtores rurais e pessoas físicas podem doar alimentos próprios para consumo e em boas condições.</p></div>
+    <div class="faq-item"><button type="button">Quais alimentos podem ser cadastrados?<span>+</span></button><p hidden>Alimentos dentro da validade, bem armazenados e adequados ao consumo.</p></div>
+    <div class="faq-item"><button type="button">Quem pode reservar uma doação?<span>+</span></button><p hidden>ONGs, projetos sociais, bancos de alimentos, instituições e voluntários cadastrados.</p></div>
+    <div class="faq-item"><button type="button">Como a coleta é organizada?<span>+</span></button><p hidden>O doador informa local e horário, e a instituição confirma os detalhes após a reserva.</p></div>
+    <div class="faq-item"><button type="button">O iFeed realiza o transporte?<span>+</span></button><p hidden>O protótipo organiza a conexão; o transporte é combinado entre os participantes.</p></div>
+    <div class="faq-item"><button type="button">Como funcionam selos e certificados?<span>+</span></button><p hidden>O reconhecimento é calculado a partir das doações concluídas e do impacto registrado na plataforma.</p></div>
+  </div>
+  <div class="public-join"><h2>Pronto para fazer parte dessa conexão?</h2><div class="button-row"><a class="btn btn-yellow" href="{% url 'cadastro' %}?perfil=doador">Quero doar</a><a class="btn btn-dark-outline" href="{% url 'cadastro' %}?perfil=recebedor">Quero receber</a></div></div>
+</section>
+{% endblock %}

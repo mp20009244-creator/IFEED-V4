@@ -1,0 +1,472 @@
+/* Ajustes específicos da integração Django.
+   O design principal está em ifeed.css; este arquivo cuida de formulários,
+   mensagens e pequenos estados gerados pelo backend. */
+
+[hidden] {
+  display: none !important;
+}
+.nav-symbol {
+  width: 24px;
+  text-align: center;
+  font-size: 22px;
+  line-height: 1;
+}
+.big-outline,
+.line-icon {
+  font-size: 25px;
+  font-style: normal;
+}
+.button-plus {
+  font-size: 24px;
+  line-height: 0;
+}
+.green-text,
+.legend-green {
+  color: var(--green);
+}
+.muted-note {
+  color: var(--muted);
+  font-size: 12px;
+}
+.span-all {
+  grid-column: 1/-1;
+}
+.empty-state {
+  padding: 35px;
+  text-align: center;
+  color: var(--muted);
+}
+.empty-state h2,
+.empty-state h3 {
+  color: var(--ink);
+}
+
+.message-stack {
+  position: fixed;
+  right: 24px;
+  top: 95px;
+  z-index: 180;
+  width: min(390px, calc(100% - 32px));
+  display: grid;
+  gap: 10px;
+}
+.flash-message {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 15px 17px;
+  border-radius: 12px;
+  background: #073f31;
+  color: #fff;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.16);
+}
+.flash-message.flash-error {
+  background: #7c2d12;
+}
+.flash-message.flash-warning {
+  background: #8a5b00;
+}
+.flash-message button {
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font-size: 20px;
+  padding: 0;
+}
+
+.django-auth-form {
+  display: grid;
+  gap: 10px;
+  margin-top: 22px;
+}
+.django-auth-form > label:not(.remember):not(.terms-check) {
+  font-size: 13px;
+  font-weight: 700;
+  color: #303b47;
+}
+.django-auth-form > input,
+.django-auth-form > select {
+  width: 100%;
+  height: 48px;
+  border: 1px solid #d7dfda;
+  border-radius: 9px;
+  padding: 0 14px;
+  outline: none;
+}
+.django-auth-form > input:focus,
+.django-auth-form > select:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(15, 151, 47, 0.1);
+}
+.django-auth-form .remember {
+  margin: 8px 0 4px;
+}
+.auth-submit {
+  height: 50px;
+  margin-top: 3px;
+}
+.form-alert,
+.errorlist {
+  margin: 0;
+  padding: 11px 13px;
+  border-radius: 8px;
+  background: #fff1eb;
+  color: #a13510;
+  font-size: 12px;
+  list-style: none;
+}
+.errorlist li + li {
+  margin-top: 4px;
+}
+.auth-icon {
+  font-size: 38px;
+  line-height: 1;
+  color: #fff;
+}
+.auth-icon.small {
+  font-size: 27px;
+  color: var(--green);
+}
+.signup-shell {
+  min-height: 1060px;
+}
+.register-form-wrap {
+  align-items: flex-start;
+  padding-top: 25px;
+  padding-bottom: 30px;
+}
+.register-form-wrap .auth-form-inner {
+  max-width: 620px;
+}
+.register-form-wrap .auth-form h2 {
+  font-size: 34px;
+}
+.register-form-wrap .secure-line {
+  margin-bottom: 20px;
+}
+.register-form h3 {
+  margin: 22px 0 13px;
+}
+.role-grid .role-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  padding: 18px;
+  display: flex;
+  text-align: left;
+  gap: 13px;
+  position: relative;
+  color: var(--ink);
+  cursor: pointer;
+}
+.role-grid .role-card.selected {
+  border-color: var(--green);
+  background: var(--green-soft);
+}
+.role-grid .role-card > input {
+  position: absolute;
+  opacity: 0;
+}
+.role-grid .role-card .auth-icon {
+  color: var(--green);
+  font-size: 34px;
+}
+.role-grid .role-card strong,
+.role-grid .role-card small {
+  display: block;
+}
+.role-grid .role-card small {
+  color: var(--muted);
+  line-height: 1.45;
+}
+.role-grid .role-card i {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #7d8792;
+  border-radius: 50%;
+  position: absolute;
+  right: 14px;
+  top: 18px;
+}
+.role-grid .role-card.selected i {
+  border-color: var(--green);
+  box-shadow: inset 0 0 0 4px #fff;
+  background: var(--green);
+}
+.register-grid label {
+  display: block;
+}
+.register-grid input,
+.register-grid select {
+  width: 100%;
+  height: 46px;
+  border: 1px solid #d7dfda;
+  border-radius: 9px;
+  padding: 0 14px;
+  margin-top: 7px;
+  outline: none;
+}
+.register-grid input:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(15, 151, 47, 0.08);
+}
+
+.chart-grid-lines path {
+  fill: none;
+  stroke: #e4e9e6;
+  stroke-width: 1;
+}
+.chart-area {
+  fill: url(#areaPainel);
+}
+.impact-area {
+  fill: url(#areaImpacto);
+}
+.chart-line {
+  fill: none;
+  stroke: var(--green);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.chart-points circle {
+  fill: var(--green);
+}
+.chart-labels {
+  font-size: 14px;
+  fill: #58616d;
+}
+.dashboard-line-chart svg {
+  min-height: 235px;
+}
+.legend-green {
+  font-size: 12px;
+}
+.donation-tabs {
+  border-bottom: 1px solid var(--line);
+  margin-top: 12px;
+}
+.status-disponivel {
+  background: #eaf6ed;
+  color: #087a25;
+}
+.status-pausada,
+.status-cancelada {
+  background: #f1f2f3;
+  color: #5d6675;
+}
+.text-danger {
+  border: 0;
+  background: transparent;
+  color: #a33a25;
+  font-weight: 700;
+  margin: 16px auto 0;
+  display: block;
+}
+.collection-kpis {
+  margin-top: 10px;
+}
+.medal-watermark {
+  font-size: 86px;
+  color: #cedbd1;
+  opacity: 0.72;
+}
+.points-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--green-soft);
+  color: var(--green);
+  display: grid;
+  place-items: center;
+}
+.impact-leaf {
+  position: absolute;
+  right: 30px;
+  bottom: 15px;
+  font-size: 145px;
+  opacity: 0.12;
+}
+.logout-form {
+  margin-top: auto;
+  display: flex;
+}
+.logout-form .side-logout {
+  width: calc(100% - 48px);
+}
+
+.new-donation-form input,
+.new-donation-form select,
+.new-donation-form textarea {
+  width: 100%;
+  border: 1px solid #d7e0db;
+  border-radius: 8px;
+  padding: 0 12px;
+  margin-top: 6px;
+  background: #fff;
+  color: var(--ink);
+  outline: none;
+}
+.new-donation-form input,
+.new-donation-form select {
+  height: 42px;
+}
+.new-donation-form textarea {
+  min-height: 94px;
+  padding-top: 10px;
+}
+.new-donation-form input:focus,
+.new-donation-form select:focus,
+.new-donation-form textarea:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(15, 151, 47, 0.08);
+}
+.new-donation-form .errorlist {
+  margin-top: 5px;
+}
+.photo-upload input[type="file"] {
+  display: none;
+}
+.photo-upload .errorlist {
+  display: block;
+}
+.terms-check input[type="checkbox"] {
+  width: 21px;
+  height: 21px;
+  margin: 0;
+}
+.profile-form .errorlist {
+  margin-top: 5px;
+}
+.profile-form select {
+  width: 100%;
+  height: 42px;
+  border: 1px solid #d7e0db;
+  border-radius: 8px;
+  padding: 0 12px;
+  margin-top: 6px;
+  background: #fff;
+}
+.profile-form input[type="url"] {
+  width: 100%;
+  height: 42px;
+  border: 1px solid #d7e0db;
+  border-radius: 8px;
+  padding: 0 12px;
+  margin-top: 6px;
+}
+.preferences-card input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+}
+.top-user > a {
+  font-size: 22px;
+}
+.bell-button {
+  font-size: 24px;
+}
+.side-logo .logo img {
+  height: 50px;
+}
+.dash-title-row .btn {
+  white-space: nowrap;
+}
+.map-panel {
+  background-color: #edf2ef;
+}
+
+.mini-donation small,
+.icon-copy,
+.route-box > span,
+.collection-item span:not(.status-pill),
+.donation-result span:not(.status-pill),
+.profile-summary > div:nth-child(2) > span:last-child {
+  align-items: center;
+  gap: 6px;
+}
+
+.mini-donation small .app-icon,
+.collection-item .app-icon,
+.donation-result .app-icon,
+.icon-copy .app-icon,
+.route-box .app-icon,
+.preferences-card .app-icon {
+  width: 15px;
+  height: 15px;
+}
+
+@media (max-width: 1100px) {
+  .signup-shell {
+    min-height: auto;
+  }
+  .register-form-wrap {
+    padding-top: 45px;
+  }
+  .auth-login-shell {
+    min-height: auto;
+  }
+  .auth-benefits {
+    bottom: 35px;
+  }
+  .signup-photo {
+    max-height: 570px;
+    object-fit: contain;
+  }
+}
+@media (max-width: 780px) {
+  .message-stack {
+    top: 78px;
+    right: 16px;
+  }
+  .auth-icon {
+    font-size: 30px;
+  }
+  .register-form-wrap {
+    padding-top: 38px;
+  }
+  .role-grid {
+    grid-template-columns: 1fr;
+  }
+  .signup-shell .auth-visual {
+    min-height: 760px;
+  }
+  .signup-shell .auth-copy {
+    top: 90px;
+  }
+  .signup-shell .signup-photo {
+    top: 230px;
+    right: -100px;
+  }
+  .profile-form .input-grid {
+    grid-template-columns: 1fr;
+  }
+  .profile-form .span-2 {
+    grid-column: auto;
+  }
+}
+
+@media print {
+  .sidebar,
+  .dashboard-topbar,
+  .dash-title-row .btn,
+  .message-stack {
+    display: none !important;
+  }
+  .dashboard-app {
+    padding: 0;
+    background: #fff;
+  }
+  .dashboard-main {
+    margin: 0;
+    border: 0;
+  }
+  .dashboard-content {
+    max-width: none;
+  }
+  .dash-card,
+  .kpi-card {
+    break-inside: avoid;
+    box-shadow: none;
+  }
+}

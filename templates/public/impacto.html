@@ -1,0 +1,93 @@
+{% extends 'base_public.html' %}
+{% load static %}
+{% block title %}Impacto social | iFeed{% endblock %}
+{% block body_class %}impact-page{% endblock %}
+{% block content %}
+<section class="impact-public-hero container-wide">
+  <div class="impact-public-top">
+    <div class="impact-hero-copy">
+      <span class="section-tag"><span data-icon="leaf"></span>Impacto que transforma</span>
+      <h1>Cada doação pode<br>alimentar histórias,<br><em>não o desperdício.</em></h1>
+      <p>O iFeed transforma conexão em possibilidade: menos alimento descartado, mais apoio às comunidades e mais responsabilidade compartilhada.</p>
+    </div>
+
+    <div class="public-chart-card">
+      <div class="chart-card-heading">
+        <div><strong>Evolução das doações</strong><small data-chart-caption>Quilos destinados nos últimos seis meses</small></div>
+        <span class="public-chart-tabs" data-chart-tabs="public-impact-chart" role="group" aria-label="Período do gráfico">
+          <button class="active" type="button" data-chart-period="semester" aria-pressed="true">6 meses</button>
+          <button type="button" data-chart-period="year" aria-pressed="false">1 ano</button>
+          <button type="button" data-chart-period="all" aria-pressed="false">Todo o período</button>
+        </span>
+      </div>
+      <div class="public-line-chart" data-line-chart="public-impact-chart" data-source="public-impact-chart-data">
+        <svg viewBox="0 0 680 280" role="img" aria-label="Gráfico interativo da evolução demonstrativa das doações">
+          <defs><linearGradient id="areaImpactoPublico" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#16a34a" stop-opacity=".28"/><stop offset="1" stop-color="#16a34a" stop-opacity=".02"/></linearGradient></defs>
+          <g data-chart-grid></g>
+          <path class="chart-area public-impact-area" data-chart-area></path>
+          <path class="chart-line" data-chart-line></path>
+          <g class="chart-points" data-chart-points></g>
+          <g class="chart-labels" data-chart-labels></g>
+        </svg>
+        <output class="chart-tooltip" hidden></output>
+      </div>
+    </div>
+  </div>
+
+  <div class="public-stats impact-stats">
+    <article class="public-stat"><img class="impact-stat-icon" src="{% static 'assets/icons/concept/impact-stat-food.png' %}" alt="" aria-hidden="true"><div><strong>12.580 kg</strong><small>Alimentos doados*</small></div></article>
+    <article class="public-stat"><img class="impact-stat-icon" src="{% static 'assets/icons/concept/impact-stat-meals.png' %}" alt="" aria-hidden="true"><div><strong>25.160</strong><small>Refeições estimadas*</small></div></article>
+    <article class="public-stat"><img class="impact-stat-icon" src="{% static 'assets/icons/concept/impact-stat-waste.png' %}" alt="" aria-hidden="true"><div><strong>8.320 kg</strong><small>Desperdício evitado*</small></div></article>
+    <article class="public-stat"><img class="impact-stat-icon" src="{% static 'assets/icons/concept/impact-stat-institutions.png' %}" alt="" aria-hidden="true"><div><strong>340</strong><small>Instituições atendidas*</small></div></article>
+  </div>
+  <div class="info-note"><span data-icon="info"></span>Dados demonstrativos do protótipo.</div>
+</section>
+
+<section class="beneficiaries container-wide">
+  <div class="beneficiaries-copy">
+    <h2>Fortalecer quem já<br><em>cuida da comunidade.</em></h2>
+    <p>Uma rede de impacto para todos os envolvidos.</p>
+    <div class="beneficiary-grid">
+      <article><img src="{% static 'assets/icons/concept/about-donors.png' %}" alt="" aria-hidden="true"><h3>Empresas e doadores</h3><p>Processo organizado, registro de ações e responsabilidade social.</p></article>
+      <article><img src="{% static 'assets/icons/concept/about-receivers.png' %}" alt="" aria-hidden="true"><h3>ONGs e projetos sociais</h3><p>Oportunidades próximas, reservas e coletas organizadas.</p></article>
+      <article><img src="{% static 'assets/icons/concept/journey-register-outline.png' %}" alt="" aria-hidden="true"><h3>Pessoas em situação de vulnerabilidade</h3><p>Apoio por meio de instituições e redes responsáveis.</p></article>
+      <article><img src="{% static 'assets/icons/concept/env-shared-responsibility.png' %}" alt="" aria-hidden="true"><h3>Famílias e comunidades</h3><p>Redes locais conectadas e melhor aproveitamento dos alimentos.</p></article>
+    </div>
+  </div>
+  <div class="impact-photo-feature">
+    <img src="{% static 'assets/img/impact-delivery.png' %}" alt="Entrega organizada de alimentos para uma representante comunitária">
+  </div>
+</section>
+
+<section class="environment container-wide">
+  <div class="env-head">
+    <div><span class="green-kicker">Impacto ambiental</span><h2>Aproveitar melhor também<br>é <em>cuidar do futuro.</em></h2></div>
+    <img class="env-decor-icon" src="{% static 'assets/icons/concept/env-reduce.png' %}" alt="" aria-hidden="true">
+  </div>
+
+  <div class="env-features">
+    <article><img src="{% static 'assets/icons/concept/env-reduce.png' %}" alt="" aria-hidden="true"><span>Reduzir<br>desperdício</span></article>
+    <article><img src="{% static 'assets/icons/concept/env-use-food.png' %}" alt="" aria-hidden="true"><span>Aproveitar alimentos<br>próprios para consumo</span></article>
+    <article><img src="{% static 'assets/icons/concept/env-responsible-consumption.png' %}" alt="" aria-hidden="true"><span>Consumo<br>responsável</span></article>
+    <article><img src="{% static 'assets/icons/concept/env-new-habits.png' %}" alt="" aria-hidden="true"><span>Novos hábitos nos<br>estabelecimentos</span></article>
+    <article><img src="{% static 'assets/icons/concept/env-shared-responsibility.png' %}" alt="" aria-hidden="true"><span>Responsabilidade<br>compartilhada</span></article>
+  </div>
+
+  <h3 class="calculation-title">Como o impacto é calculado</h3>
+  <div class="calculation-flow">
+    <article><div class="calculation-marker"><span>01</span><img src="{% static 'assets/icons/concept/calc-kilos.png' %}" alt="" aria-hidden="true"></div><h4>Quilos informados</h4><p>Você informa os quilos de alimentos disponíveis.</p></article>
+    <article><div class="calculation-marker"><span>02</span><img src="{% static 'assets/icons/concept/calc-donations.png' %}" alt="" aria-hidden="true"></div><h4>Doações concluídas</h4><p>Sua doação é confirmada e registrada na plataforma.</p></article>
+    <article><div class="calculation-marker"><span>03</span><img src="{% static 'assets/icons/concept/calc-collections.png' %}" alt="" aria-hidden="true"></div><h4>Coletas entregues</h4><p>A coleta é realizada e os alimentos são entregues.</p></article>
+    <article><div class="calculation-marker"><span>04</span><img src="{% static 'assets/icons/concept/calc-meals.png' %}" alt="" aria-hidden="true"></div><h4>Refeições estimadas</h4><p>Calculamos refeições estimadas a partir dos alimentos doados.</p></article>
+    <article><div class="calculation-marker"><span>05</span><img src="{% static 'assets/icons/concept/calc-history.png' %}" alt="" aria-hidden="true"></div><h4>Histórico e instituições</h4><p>Tudo é registrado e associado às instituições beneficiadas.</p></article>
+  </div>
+  <div class="info-note"><span data-icon="info"></span>Os cálculos são demonstrativos e deverão ser validados no backend.</div>
+</section>
+
+<section class="impact-quote container-wide">
+  <blockquote>“Combater o desperdício é fazer o alimento cumprir o seu propósito: nutrir pessoas, fortalecer comunidades e alimentar futuros.”<cite>— iFeed</cite></blockquote>
+  <div class="impact-quote-photo"><img src="{% static 'assets/img/community-delivery.png' %}" alt="Voluntária entregando uma caixa de alimentos para a comunidade"></div>
+</section>
+<div class="center-cta container-wide"><span class="cta-brand-mark" data-icon="map-pin"></span><h2>Seu excedente pode se transformar em esperança.</h2><a class="btn btn-primary" href="{% url 'cadastro' %}?perfil=doador">Quero gerar impacto</a></div>
+{{ impacto_publico_chart|json_script:"public-impact-chart-data" }}
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends 'base_internal.html' %}
+{% load static %}
+{% block title %}Perfil{% endblock %}
+{% block content %}
+<section class="dash-title-row">
+  <div>
+    <h1>Perfil</h1>
+    <p>Gerencie suas informações e preferências.</p>
+  </div>
+  <span class="muted-note"><span data-icon="shield"></span>Dados protegidos pela sessão Django.</span>
+</section>
+
+<section class="profile-summary">
+  <img src="{% if perfil.foto_url %}{{ perfil.foto_url }}{% else %}{% static 'assets/img/avatar-carlos.png' %}{% endif %}" alt="Foto de perfil">
+  <div>
+    <h2>{{ request.user.get_full_name|default:request.user.username }}</h2>
+    <p>{{ perfil.organizacao|default:'Membro da rede iFeed' }}</p>
+    <span class="status-pill status-doador">{{ perfil.get_tipo_display }}</span>
+    <span><i data-icon="check-circle"></i>Conta verificada</span>
+  </div>
+  <div>
+    <p>Membro desde {{ perfil.criado_em|date:'F \d\e Y' }}</p>
+    <a class="btn btn-outline" href="#campo-foto" data-profile-tab="pessoais"><span data-icon="camera"></span>Alterar foto por URL</a>
+  </div>
+</section>
+
+<div class="tabs profile-tabs" role="tablist" aria-label="Seções do perfil">
+  <button class="active" type="button" role="tab" aria-selected="true" data-tab="pessoais">Dados pessoais</button>
+  <button type="button" role="tab" aria-selected="false" data-tab="organizacao">Organização</button>
+  <button type="button" role="tab" aria-selected="false" data-tab="endereco">Endereço</button>
+  <button type="button" role="tab" aria-selected="false" data-tab="preferencias">Preferências</button>
+</div>
+
+<form class="profile-form" method="post" novalidate>{% csrf_token %}
+  {% if form.non_field_errors %}<div class="form-alert span-all">{{ form.non_field_errors }}</div>{% endif %}
+
+  <section id="pessoais" class="dash-card tab-panel active" role="tabpanel">
+    <h2>Informações pessoais</h2>
+    <div class="input-grid">
+      <label>{{ form.nome_completo.label }}{{ form.nome_completo }}{{ form.nome_completo.errors }}</label>
+      <label class="input-with-addon">{{ form.email.label }}{{ form.email }}<span>G</span></label>
+      <label>{{ form.telefone.label }}{{ form.telefone }}{{ form.telefone.errors }}</label>
+      <label>{{ form.funcao.label }}{{ form.funcao }}{{ form.funcao.errors }}</label>
+      <label id="campo-foto" class="span-2">Foto por URL{{ form.foto_url }}{{ form.foto_url.errors }}<small>Cole uma URL pública de imagem ou deixe vazio para usar a foto padrão.</small></label>
+    </div>
+  </section>
+
+  <section id="organizacao" class="dash-card tab-panel" role="tabpanel" hidden>
+    <h2>Organização</h2>
+    <div class="input-grid">
+      <label>{{ form.organizacao.label }}{{ form.organizacao }}{{ form.organizacao.errors }}</label>
+      <label>{{ form.tipo_organizacao.label }}{{ form.tipo_organizacao }}{{ form.tipo_organizacao.errors }}</label>
+      <label>{{ form.documento.label }}{{ form.documento }}{{ form.documento.errors }}</label>
+      <span class="verified">✓ Estabelecimento cadastrado</span>
+      <label class="span-2">{{ form.descricao.label }}{{ form.descricao }}{{ form.descricao.errors }}</label>
+      <label class="span-2">Perfil na plataforma{{ form.tipo }}{{ form.tipo.errors }}</label>
+    </div>
+  </section>
+
+  <section id="endereco" class="dash-card tab-panel" role="tabpanel" hidden>
+    <h2>Endereço de retirada</h2>
+    <div class="input-grid">
+      <label>{{ form.cep.label }}{{ form.cep }}{{ form.cep.errors }}</label>
+      <label>{{ form.logradouro.label }}{{ form.logradouro }}{{ form.logradouro.errors }}</label>
+      <label>{{ form.numero.label }}{{ form.numero }}{{ form.numero.errors }}</label>
+      <label>{{ form.complemento.label }}{{ form.complemento }}{{ form.complemento.errors }}</label>
+      <label>{{ form.bairro.label }}{{ form.bairro }}{{ form.bairro.errors }}</label>
+      <label>{{ form.cidade.label }}{{ form.cidade }}{{ form.cidade.errors }}</label>
+      <label>{{ form.estado.label }}{{ form.estado }}{{ form.estado.errors }}</label>
+    </div>
+    <div class="via-note" id="cep-feedback">✓ Endereço consultável pela ViaCEP</div>
+  </section>
+
+  <section id="preferencias" class="dash-card preferences-card tab-panel" role="tabpanel" hidden>
+    <h2>Preferências</h2>
+    <label><span><i data-icon="bell"></i>Avisos de novas reservas</span>{{ form.avisos_reservas }}<i></i></label>
+    <label><span><i data-icon="clock"></i>Lembretes de coleta</span>{{ form.lembretes_coleta }}<i></i></label>
+    <label><span><i data-icon="chart"></i>Resumo mensal de impacto</span>{{ form.resumo_impacto }}<i></i></label>
+    <a href="#"><span><i data-icon="lock"></i>Login e segurança</span><small>Conta Django conectada ›</small></a>
+  </section>
+
+  <div class="profile-actions">
+    <a class="btn btn-outline" href="{% url 'painel' %}">Cancelar</a>
+    <button class="btn btn-primary" type="submit">Salvar alterações</button>
+  </div>
+</form>
+{% endblock %}
