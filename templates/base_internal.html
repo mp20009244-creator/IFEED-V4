@@ -34,10 +34,46 @@
         <button class="dash-menu" id="dash-menu" type="button" aria-label="Abrir menu"><span data-icon="menu"></span></button>
         <label class="top-search"><span data-icon="search"></span><input placeholder="Digite um endereço" aria-label="Digite um endereço"></label>
         <div class="top-user">
-          <button class="bell-button" id="bell-button" type="button" aria-label="Notificações"><span data-icon="bell"></span><i></i></button>
+          <div class="notification-wrap">
+            <button
+              class="bell-button"
+              id="bell-button"
+              type="button"
+              aria-label="Notificações"
+              aria-expanded="false"
+              aria-controls="notification-pop"
+            >
+              <span data-icon="bell"></span>
+              {% if notificacoes_count %}<i class="bell-dot" aria-hidden="true"></i>{% endif %}
+            </button>
+            <div class="notification-pop" id="notification-pop" role="region" aria-label="Lista de notificações" hidden>
+              <header class="notification-pop-header">
+                <strong>Notificações</strong>
+                {% if notificacoes_count %}
+                  <span class="notification-count">{{ notificacoes_count }}</span>
+                {% endif %}
+              </header>
+              {% if notificacoes %}
+                <ul class="notification-list">
+                  {% for item in notificacoes %}
+                    <li>
+                      <a href="{{ item.url }}">
+                        <strong>{{ item.titulo }}</strong>
+                        <span>{{ item.texto }}</span>
+                        {% if item.quando %}
+                          <time datetime="{{ item.quando|date:'c' }}">{{ item.quando|timesince }} atrás</time>
+                        {% endif %}
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                <p class="notification-empty">Nenhuma notificação no momento. Quando houver reservas ou coletas, elas aparecem aqui.</p>
+              {% endif %}
+            </div>
+          </div>
           <img src="{% if perfil_ifeed.foto_url %}{{ perfil_ifeed.foto_url }}{% else %}{% static 'assets/img/avatar-carlos.png' %}{% endif %}" alt="{{ request.user.get_full_name|default:request.user.username }}">
           <a href="{% url 'perfil' %}" aria-label="Abrir perfil"><span data-icon="chevron-down"></span></a>
-          <div class="notification-pop" id="notification-pop" hidden><strong>Notificações</strong><p>Bem-vindo à plataforma iFeed.</p><p>Confira suas coletas e doações recentes.</p></div>
         </div>
       </header>
       {% include 'includes/messages.html' %}

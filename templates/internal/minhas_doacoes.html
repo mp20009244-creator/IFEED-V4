@@ -2,15 +2,223 @@
 {% load static %}
 {% block title %}Minhas doações{% endblock %}
 {% block content %}
-<section class="dash-title-row"><div><h1>Minhas doações</h1><p>Gerencie os alimentos que você disponibilizou.</p></div><a class="btn btn-primary" href="{% url 'doacao_criar' %}"><span data-icon="package"></span>Nova doação</a></section>
-<section class="kpi-grid"><article class="kpi-card"><span data-icon="package"></span><div><small>Total de doações</small><strong>{{ resumo.total }}</strong></div></article><article class="kpi-card kpi-1"><span data-icon="clock"></span><div><small>Disponíveis</small><strong>{{ resumo.disponiveis }}</strong></div></article><article class="kpi-card kpi-2"><span data-icon="calendar"></span><div><small>Reservadas</small><strong>{{ resumo.reservadas }}</strong></div></article><article class="kpi-card kpi-3"><span data-icon="check-circle"></span><div><small>Entregues</small><strong>{{ resumo.entregues }}</strong></div></article></section>
-<div class="tabs donation-tabs"><button class="active" type="button">Todas</button><button type="button">Disponíveis</button><button type="button">Reservadas</button><button type="button">Coletadas</button><button type="button">Entregues</button></div>
-<section class="donation-workspace">
-  <div><div class="table-tools"><label><span>⌕</span><input type="search" placeholder="Buscar por alimento"></label><button class="btn btn-outline" type="button">⌘ Filtros</button></div>
-    <div class="donation-table"><div class="table-header"><span>Doação</span><span>Quantidade</span><span>Validade</span><span>Instituição</span><span>Status</span><span>Ações</span></div>
-      {% for doacao in doacoes %}<a class="table-row {% if selecionada.pk == doacao.pk %}selected{% endif %}" href="?selecionada={{ doacao.pk }}"><span><img src="{{ doacao.foto_url }}" alt=""><strong>{{ doacao.nome_alimento }}</strong></span><span>{{ doacao.quantidade_formatada }}</span><span>{{ doacao.data_validade|date:'d/m/Y' }}</span><span>{% if doacao.reservada_por %}{{ doacao.reservada_por.perfil_ifeed.organizacao|default:doacao.reservada_por.get_full_name }}{% else %}—{% endif %}</span><span><i class="status-pill status-{{ doacao.status }}">{{ doacao.get_status_display }}</i></span><span>◉ Ver<br>✎ Editar</span></a>{% empty %}<div class="empty-state">Nenhuma doação cadastrada.</div>{% endfor %}
-    </div><nav class="pagination"><button type="button">‹</button><button class="active" type="button">1</button><button type="button">2</button><button type="button">›</button></nav>
+<section class="dash-title-row">
+  <div>
+    <h1>Minhas doações</h1>
+    <p>Gerencie os alimentos que você disponibilizou.</p>
   </div>
-  {% if selecionada %}<aside class="dash-card donation-aside"><img src="{{ selecionada.foto_url }}" alt="{{ selecionada.nome_alimento }}"><div class="aside-title"><div><h2>{{ selecionada.nome_alimento }}</h2><p>{{ selecionada.quantidade_formatada }}</p></div><span class="status-pill status-{{ selecionada.status }}">{{ selecionada.get_status_display }}</span></div><dl><div><dt>□ Validade</dt><dd>{{ selecionada.data_validade|date:'d/m/Y' }}</dd></div><div><dt>◉ Armazenamento</dt><dd>{{ selecionada.get_tipo_armazenamento_display }}</dd></div><div><dt>◷ Retirada</dt><dd>{{ selecionada.horario_inicio|time:'H:i' }}–{{ selecionada.horario_fim|time:'H:i' }}</dd></div><div><dt>♧ Instituição</dt><dd>{% if selecionada.reservada_por %}{{ selecionada.reservada_por.perfil_ifeed.organizacao|default:selecionada.reservada_por.get_full_name }}{% else %}Aguardando reserva{% endif %}</dd></div><div><dt>⌖ Local</dt><dd>{{ selecionada.cidade }} — {{ selecionada.estado }}</dd></div></dl><div class="observation"><strong>Observações</strong><p>{{ selecionada.descricao|default:'Alimentos selecionados e higienizados.' }}</p></div><a class="btn btn-primary btn-full" href="{% url 'doacao_detalhe' selecionada.pk %}">◉ Ver detalhes</a><a class="btn btn-outline btn-full" href="{% url 'doacao_editar' selecionada.pk %}">✎ Editar doação</a>{% if selecionada.status != 'reservada' and selecionada.status != 'coletada' %}<form method="post" action="{% url 'doacao_excluir' selecionada.pk %}" data-confirm-form="Excluir definitivamente esta doação?">{% csrf_token %}<button class="text-danger" type="submit">Excluir doação</button></form>{% endif %}</aside>{% endif %}
+  <a class="btn btn-primary" href="{% url 'doacao_criar' %}">
+    <span data-icon="package"></span>Nova doação
+  </a>
+</section>
+
+<section class="kpi-grid" aria-label="Resumo das doações">
+  <article class="kpi-card">
+    <span data-icon="package"></span>
+    <div><small>Total de doações</small><strong>{{ resumo.total }}</strong></div>
+  </article>
+  <article class="kpi-card kpi-1">
+    <span data-icon="clock"></span>
+    <div><small>Disponíveis</small><strong>{{ resumo.disponiveis }}</strong></div>
+  </article>
+  <article class="kpi-card kpi-2">
+    <span data-icon="calendar"></span>
+    <div><small>Reservadas</small><strong>{{ resumo.reservadas }}</strong></div>
+  </article>
+  <article class="kpi-card kpi-3">
+    <span data-icon="check-circle"></span>
+    <div><small>Entregues</small><strong>{{ resumo.entregues }}</strong></div>
+  </article>
+</section>
+
+<div class="tabs donation-tabs" role="tablist" aria-label="Filtrar por status">
+  {% for valor, rotulo, contagem in status_tabs %}
+    <a
+      class="{% if filtro_status == valor %}active{% endif %}"
+      href="{% url 'minhas_doacoes' %}?{% if valor != 'todas' %}status={{ valor }}&{% endif %}{% if busca %}q={{ busca|urlencode }}{% endif %}"
+      role="tab"
+      aria-selected="{% if filtro_status == valor %}true{% else %}false{% endif %}"
+    >{{ rotulo }}{% if contagem is not None %} ({{ contagem }}){% endif %}</a>
+  {% endfor %}
+</div>
+
+<section class="donation-workspace">
+  <div>
+    <form class="table-tools" method="get" action="{% url 'minhas_doacoes' %}" role="search">
+      {% if filtro_status and filtro_status != 'todas' %}
+        <input type="hidden" name="status" value="{{ filtro_status }}">
+      {% endif %}
+      <label>
+        <span>⌕</span>
+        <input
+          type="search"
+          name="q"
+          value="{{ busca }}"
+          placeholder="Buscar por alimento, categoria ou cidade"
+          aria-label="Buscar doações"
+        >
+      </label>
+      <button class="btn btn-outline" type="submit">Buscar</button>
+      {% if busca %}
+        <a class="btn btn-outline" href="{% url 'minhas_doacoes' %}{% if filtro_status and filtro_status != 'todas' %}?status={{ filtro_status }}{% endif %}">Limpar</a>
+      {% endif %}
+    </form>
+
+    <div class="donation-table" role="table" aria-label="Lista de doações">
+      <div class="table-header" role="row">
+        <span>Doação</span>
+        <span>Quantidade</span>
+        <span>Validade</span>
+        <span>Instituição</span>
+        <span>Status</span>
+        <span>Ações</span>
+      </div>
+
+      {% for doacao in doacoes %}
+        <div class="table-row {% if selecionada and selecionada.pk == doacao.pk %}selected{% endif %}" role="row">
+          <a class="table-row-main" href="?{% if filtro_status and filtro_status != 'todas' %}status={{ filtro_status }}&{% endif %}{% if busca %}q={{ busca|urlencode }}&{% endif %}{% if page_obj.number > 1 %}page={{ page_obj.number }}&{% endif %}selecionada={{ doacao.pk }}">
+            <span>
+              <img src="{{ doacao.foto_url }}" alt="">
+              <strong>{{ doacao.nome_alimento }}</strong>
+            </span>
+            <span>{{ doacao.quantidade_formatada }}</span>
+            <span>{{ doacao.data_validade|date:'d/m/Y' }}</span>
+            <span>
+              {% if doacao.reservada_por %}
+                {{ doacao.reservada_por.perfil_ifeed.organizacao|default:doacao.reservada_por.get_full_name }}
+              {% else %}
+                —
+              {% endif %}
+            </span>
+            <span>
+              <span class="status-pill status-{{ doacao.status }}">{{ doacao.get_status_display }}</span>
+            </span>
+          </a>
+          <span class="table-actions">
+            <a href="{% url 'doacao_detalhe' doacao.pk %}" title="Ver detalhes">◉ Ver</a>
+            {% if doacao.status == 'disponivel' %}
+              <a href="{% url 'doacao_editar' doacao.pk %}" title="Editar">✎ Editar</a>
+            {% endif %}
+          </span>
+        </div>
+      {% empty %}
+        <div class="empty-state">
+          <h3>
+            {% if busca or filtro_status != 'todas' %}
+              Nenhuma doação encontrada com esses filtros
+            {% else %}
+              Nenhuma doação cadastrada
+            {% endif %}
+          </h3>
+          <p>
+            {% if busca or filtro_status != 'todas' %}
+              Ajuste a busca ou o status, ou cadastre uma nova doação.
+            {% else %}
+              Publique alimentos disponíveis para instituições próximas.
+            {% endif %}
+          </p>
+          <a class="btn btn-primary" href="{% url 'doacao_criar' %}">Cadastrar doação</a>
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if page_obj.paginator.num_pages > 1 %}
+      <nav class="pagination" aria-label="Paginação das doações">
+        {% if page_obj.has_previous %}
+          <a href="?{% if filtro_status and filtro_status != 'todas' %}status={{ filtro_status }}&{% endif %}{% if busca %}q={{ busca|urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}{% if selecionada %}&selecionada={{ selecionada.pk }}{% endif %}" aria-label="Página anterior">‹</a>
+        {% else %}
+          <button type="button" disabled aria-disabled="true">‹</button>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+          {% if num == page_obj.number %}
+            <button class="active" type="button" aria-current="page">{{ num }}</button>
+          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a href="?{% if filtro_status and filtro_status != 'todas' %}status={{ filtro_status }}&{% endif %}{% if busca %}q={{ busca|urlencode }}&{% endif %}page={{ num }}{% if selecionada %}&selecionada={{ selecionada.pk }}{% endif %}">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+          <a href="?{% if filtro_status and filtro_status != 'todas' %}status={{ filtro_status }}&{% endif %}{% if busca %}q={{ busca|urlencode }}&{% endif %}page={{ page_obj.next_page_number }}{% if selecionada %}&selecionada={{ selecionada.pk }}{% endif %}" aria-label="Próxima página">›</a>
+        {% else %}
+          <button type="button" disabled aria-disabled="true">›</button>
+        {% endif %}
+      </nav>
+    {% endif %}
+  </div>
+
+  {% if selecionada %}
+    <aside class="dash-card donation-aside">
+      <img src="{{ selecionada.foto_url }}" alt="{{ selecionada.nome_alimento }}">
+      <div class="aside-title">
+        <div>
+          <h2>{{ selecionada.nome_alimento }}</h2>
+          <p>{{ selecionada.quantidade_formatada }}</p>
+        </div>
+        <span class="status-pill status-{{ selecionada.status }}">{{ selecionada.get_status_display }}</span>
+      </div>
+      <dl>
+        <div>
+          <dt>□ Validade</dt>
+          <dd>{{ selecionada.data_validade|date:'d/m/Y' }}</dd>
+        </div>
+        <div>
+          <dt>◉ Armazenamento</dt>
+          <dd>{{ selecionada.get_tipo_armazenamento_display }}</dd>
+        </div>
+        <div>
+          <dt>◷ Retirada</dt>
+          <dd>{{ selecionada.horario_inicio|time:'H:i' }}–{{ selecionada.horario_fim|time:'H:i' }}</dd>
+        </div>
+        <div>
+          <dt>♧ Instituição</dt>
+          <dd>
+            {% if selecionada.reservada_por %}
+              {{ selecionada.reservada_por.perfil_ifeed.organizacao|default:selecionada.reservada_por.get_full_name }}
+            {% else %}
+              Aguardando reserva
+            {% endif %}
+          </dd>
+        </div>
+        <div>
+          <dt>⌖ Local</dt>
+          <dd>{{ selecionada.cidade }} — {{ selecionada.estado }}</dd>
+        </div>
+      </dl>
+      <div class="observation">
+        <strong>Observações</strong>
+        <p>{{ selecionada.descricao|default:'Alimentos selecionados e higienizados.' }}</p>
+      </div>
+
+      <a class="btn btn-primary btn-full" href="{% url 'doacao_detalhe' selecionada.pk %}">◉ Ver detalhes</a>
+
+      {% if selecionada.status == 'disponivel' %}
+        <a class="btn btn-outline btn-full" href="{% url 'doacao_editar' selecionada.pk %}">✎ Editar doação</a>
+
+        <form
+          method="post"
+          action="{% url 'doacao_cancelar' selecionada.pk %}"
+          data-confirm-form="Cancelar esta doação? Ela deixará de ficar disponível."
+        >
+          {% csrf_token %}
+          <button class="btn btn-outline btn-full" type="submit">Cancelar doação</button>
+        </form>
+
+        <form
+          method="post"
+          action="{% url 'doacao_excluir' selecionada.pk %}"
+          data-confirm-form="Excluir definitivamente esta doação?"
+        >
+          {% csrf_token %}
+          <button class="text-danger" type="submit">Excluir doação</button>
+        </form>
+      {% endif %}
+    </aside>
+  {% else %}
+    <aside class="dash-card donation-aside empty-state">
+      <h2>Selecione uma doação</h2>
+      <p>Os detalhes e as ações aparecerão aqui.</p>
+    </aside>
+  {% endif %}
 </section>
 {% endblock %}

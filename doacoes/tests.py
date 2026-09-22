@@ -144,3 +144,90 @@ class IFeedFlowTests(TestCase):
         )
         self.assertRedirects(response, reverse("minhas_doacoes"))
         self.assertTrue(Doacao.objects.filter(doador=self.doador, nome_alimento="Legumes frescos").exists())
+
+    def test_minhas_doacoes_filtra_status_e_busca(self):
+        self.client.force_login(self.doador)
+        response = self.client.get(reverse("minhas_doacoes"), {"status": "disponiveis"})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Pães artesanais")
+        self.assertEqual(response.context["filtro_status"], "disponiveis")
+
+        response = self.client.get(reverse("minhas_doacoes"), {"q": "Pães"})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Pães artesanais")
+        self.assertEqual(response.context["busca"], "Pães")
+
+        response = self.client.get(reverse("minhas_doacoes"), {"q": "inexistente-xyz"})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Nenhuma doação encontrada")
+
+    def test_doador_cancela_doacao_disponivel(self):
+        self.client.force_login(self.doador)
+        response = self.client.post(reverse("doacao_cancelar", args=[self.doacao.pk]))
+        self.assertRedirects(response, reverse("minhas_doacoes"))
+        self.doacao.refresh_from_db()
+        self.assertEqual(self.doacao.status, "cancelada")
+
+
+    def test_doador_nao_edita_doacao_reservada(self):
+        self.doacao.status = "reservada"
+        self.doacao.reservada_por = self.recebedor
+        self.doacao.save(update_fields=["status", "reservada_por"])
+        self.client.force_login(self.doador)
+        response = self.client.get(reverse("doacao_editar", args=[self.doacao.pk]))
+        self.assertRedirects(response, reverse("minhas_doacoes"))
+
+    def test_quantidade_aceita_virgula_em_kg(self):
+        self.client.force_login(self.doador)
+        response = self.client.post(
+            reverse("doacao_criar"),
+            {
+                "nome_alimento": "Farinha",
+                "categoria": "mercearia",
+                "quantidade": "2,5",
+                "unidade": "kg",
+                "data_validade": (date.today() + timedelta(days=5)).isoformat(),
+                "tipo_armazenamento": "ambiente",
+                "horario_inicio": "10:00",
+                "horario_fim": "16:00",
+                "descricao": "Pacotes lacrados.",
+                "cep": "70000-000",
+                "logradouro": "Rua A",
+                "numero": "1",
+                "complemento": "",
+                "bairro": "Centro",
+                "cidade": "Brasília",
+                "estado": "DF",
+                "alimento_proprio": "on",
+            },
+        )
+        self.assertRedirects(response, reverse("minhas_doacoes"))
+        doacao = Doacao.objects.get(doador=self.doador, nome_alimento="Farinha")
+        self.assertEqual(doacao.quantidade, 2.5)
+
+    def test_quantidade_inteira_obrigatoria_em_unidades(self):
+        self.client.force_login(self.doador)
+        response = self.client.post(
+            reverse("doacao_criar"),
+            {
+                "nome_alimento": "Pães",
+                "categoria": "paes",
+                "quantidade": "3,5",
+                "unidade": "unidades",
+                "data_validade": (date.today() + timedelta(days=2)).isoformat(),
+                "tipo_armazenamento": "ambiente",
+                "horario_inicio": "10:00",
+                "horario_fim": "16:00",
+                "descricao": "Teste",
+                "cep": "70000-000",
+                "logradouro": "Rua A",
+                "numero": "1",
+                "complemento": "",
+                "bairro": "Centro",
+                "cidade": "Brasília",
+                "estado": "DF",
+                "alimento_proprio": "on",
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "números inteiros")

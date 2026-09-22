@@ -1,6 +1,6 @@
 """Configurações do projeto Django iFeed.
 
-O projeto foi preparado para desenvolvimento local no Windows e usa SQLite,
+O projeto foi preparado para desenvolvimento local e usa SQLite,
 portanto não precisa instalar ou configurar um servidor de banco de dados.
 """
 
@@ -15,7 +15,15 @@ SECRET_KEY = os.environ.get(
 )
 
 DEBUG = os.environ.get("DJANGO_DEBUG", "1") == "1"
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "terminal.local"]
+
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get(
+        "DJANGO_ALLOWED_HOSTS",
+        "127.0.0.1,localhost,terminal.local",
+    ).split(",")
+    if host.strip()
+]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -90,3 +98,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "painel"
 LOGOUT_REDIRECT_URL = "home"
+
+# Segurança adicional quando DEBUG=False (produção)
+if not DEBUG:
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    X_FRAME_OPTIONS = "DENY"
