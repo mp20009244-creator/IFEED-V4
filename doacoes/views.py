@@ -1,6 +1,10 @@
 import json
 from decimal import Decimal
 
+from datetime import timedelta
+from django.utils import timezone
+
+
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth import login as django_login
@@ -184,8 +188,19 @@ def _doacoes_disponiveis_queryset(request):
             | Q(categoria__icontains=busca)
             | Q(doador__perfil_ifeed__organizacao__icontains=busca)
         )
-    return doacoes, busca
+# 2. NOVOS FILTROS DA GAVETA
+    if request.GET.get("refrigerado") == "1":
+        doacoes = doacoes.filter(tipo_armazenamento="refrigerado")
 
+    if request.GET.get("validade_proxima") == "1":
+        limite_validade = timezone.localdate() + timedelta(days=2)
+        doacoes = doacoes.filter(data_validade__lte=limite_validade)
+
+    if request.GET.get("disponivel_agora") == "1":
+        agora = timezone.localtime().time()
+        doacoes = doacoes.filter(horario_inicio__lte=agora, horario_fim__gte=agora)
+
+    return doacoes, busca
 
 @login_required
 def doacoes_disponiveis(request):

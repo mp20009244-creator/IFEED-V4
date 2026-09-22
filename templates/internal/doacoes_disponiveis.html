@@ -7,22 +7,103 @@
 {% block content %}
 <section class="dash-title-row"><div><span class="dash-tag">Rede iFeed</span><h1>Doações disponíveis</h1><p>Encontre alimentos próprios para consumo perto da sua localização.</p></div><button class="btn btn-outline" type="button" data-location-button><span data-icon="map-pin"></span>Usar minha localização</button></section>
 <div class="dash-info"><span>ⓘ</span> As distâncias são demonstrativas; os alimentos exibidos são registros do banco de dados.</div>
-<form class="filter-row" method="get"><label><span>⌕</span><input name="q" value="{{ busca }}" placeholder="Buscar por alimento ou estabelecimento" aria-label="Buscar doações"></label><button class="btn btn-outline" type="submit">⌘ Filtrar</button><div class="view-buttons"><button class="active" type="button">☷ Lista + mapa</button><button type="button">◇ Mapa</button></div></form>
-<div class="chips"><button type="button">Até 5 km ×</button><button type="button">Validade próxima ×</button><button type="button">Refrigerado ×</button><button type="button">Disponível agora ×</button></div>
+<form class="filter-row" method="get"><label><span>⌕</span><input name="q" value="{{ busca }}" placeholder="Buscar por alimento ou estabelecimento" aria-label="Buscar doações"></label><button class="btn btn-outline" type="button" id="btn-abrir-filtros">⌘ Filtrar</button></form>
+
+<!-- A Gaveta de Filtros (Modal) -->
+<div id="modal-filtros" class="modal-backdrop" style="display: none; z-index: 2000;">
+  <div class="modal">
+    <h2>Filtros</h2>
+    <p>Escolha o que deseja ver no mapa e na lista:</p>
+    
+    <form method="get" action="" style="text-align: left; margin-top: 20px;">
+      <!-- Não deixa a busca por texto ser esquecida -->
+      <input type="hidden" name="q" value="{{ busca }}">
+
+      <!-- O CSS agora vai encontrar a etiqueta la dentro! -->
+      <div class="preferences-card">
+        <label>
+          <span>❄️ Apenas Refrigerado</span>
+          <input type="checkbox" name="refrigerado" value="1" {% if request.GET.refrigerado == '1' %}checked{% endif %}>
+          <i></i>
+        </label>
+      </div>
+
+      <!-- Caixa 2 -->
+      <div class="preferences-card">
+        <label>
+          <span>⏰ Validade Próxima (2 dias)</span>
+          <input type="checkbox" name="validade_proxima" value="1" {% if request.GET.validade_proxima == '1' %}checked{% endif %}>
+          <i></i>
+        </label>
+      </div>
+
+      <!-- Caixa 3 -->
+      <div class="preferences-card">
+        <label>
+          <span>✅ Disponível Agora</span>
+          <input type="checkbox" name="disponivel_agora" value="1" {% if request.GET.disponivel_agora == '1' %}checked{% endif %}>
+          <i></i>
+        </label>
+      </div>
+
+      <div style="margin-top: 24px; display: flex; gap: 10px;">
+        <button type="button" class="btn btn-outline btn-full" id="btn-fechar-filtros">Cancelar</button>
+        <button type="submit" class="btn btn-primary btn-full">Aplicar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  //  Botão Filtrar, abra a gaveta. Botão Cancelar, feche a gaveta.
+  document.getElementById('btn-abrir-filtros').addEventListener('click', function(e) {
+    e.preventDefault(); // Impede qualquer recarregamento acidental
+    document.getElementById('modal-filtros').style.display = 'grid';
+  });
+
+  document.getElementById('btn-fechar-filtros').addEventListener('click', function() {
+    document.getElementById('modal-filtros').style.display = 'none';
+  });
+</script>
 
 <section class="available-layout">
   <div class="available-list">
     {% for doacao in doacoes %}
       <article class="donation-result {% if forloop.first %}selected{% endif %}">
         <img src="{{ doacao.foto_url }}" alt="{{ doacao.nome_alimento }}">
-        <div><h3>{{ doacao.nome_alimento }}</h3><p>{{ doacao.doador.perfil_ifeed.organizacao|default:doacao.doador.get_full_name }}</p><span><i data-icon="package"></i>{{ doacao.quantidade_formatada }}</span><span><i data-icon="calendar"></i>Validade: {{ doacao.data_validade|date:'d/m' }}</span></div>
-        <div><span class="status-pill {% if doacao.esta_urgente %}status-urgente{% endif %}">{% if doacao.esta_urgente %}Urgente{% else %}Disponível{% endif %}</span><a href="{% url 'doacao_detalhe' doacao.pk %}">Ver detalhes</a></div>
+        
+        <!-- Meio do cartão: Informações do alimento -->
+        <div>
+          <h3>{{ doacao.nome_alimento }}</h3>
+          <p>{{ doacao.doador.perfil_ifeed.organizacao|default:doacao.doador.get_full_name }}</p>
+          
+          <!-- Emojis substituindo os ícones antigos que podiam quebrar -->
+          <span>📦 {{ doacao.quantidade_formatada }}</span>
+          <span>⏰ Validade: {{ doacao.data_validade|date:'d/m' }}</span>
+          
+          <!-- NOVO: Se for refrigerado, ganha o selo do floco de neve -->
+          {% if doacao.tipo_armazenamento == 'refrigerado' %}
+            <span>❄️ Refrigerado</span>
+          {% endif %}
+        </div>
+        
+        <!-- Direita do cartão: Pílula de Status e Botão -->
+        <div>
+          <span class="status-pill {% if doacao.esta_urgente %}status-urgente{% endif %}">
+            {% if doacao.esta_urgente %}
+              ⏰ Urgente
+            {% else %}
+              ✅ Disponível
+            {% endif %}
+          </span>
+          <a href="{% url 'doacao_detalhe' doacao.pk %}">Ver detalhes</a>
+        </div>
       </article>
     {% empty %}<div class="dash-card empty-state"><h2>Nenhuma doação encontrada</h2><p>Tente outra busca ou volte mais tarde.</p></div>{% endfor %}
     <nav class="pagination" aria-label="Paginação"><button type="button">‹</button><button class="active" type="button">1</button><button type="button">2</button><button type="button">3</button><button type="button">›</button></nav>
   </div>
   <div class="map-panel" aria-label="Mapa das doações disponíveis">
-    <div id="donation-map" data-mapa-url="{% url 'mapa_doacoes_dados' %}{% if busca %}?q={{ busca|urlencode }}{% endif %}"></div>
+    <div id="donation-map" data-mapa-url="{% url 'mapa_doacoes_dados' %}?{{ request.GET.urlencode }}"></div>
     <div class="map-legend"><span><i></i>Disponível</span><span><i class="urgent"></i>Urgente</span></div>
   </div>
 </section>
