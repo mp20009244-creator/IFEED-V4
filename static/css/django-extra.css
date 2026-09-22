@@ -251,6 +251,11 @@
   background: #eaf6ed;
   color: #087a25;
 }
+.status-pill.status-entregue,
+.status-entregue {
+  background: #0a6b22;
+  color: #ffffff;
+}
 .status-pausada,
 .status-cancelada {
   background: #f1f2f3;
@@ -366,8 +371,30 @@
 .bell-button {
   font-size: 24px;
 }
-.side-logo .logo img {
-  height: 50px;
+.side-logo {
+  height: auto;
+  min-height: 88px;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  overflow: visible;
+}
+.side-logo .logo,
+.side-logo .logo-compact {
+  display: flex;
+  align-items: center;
+  line-height: 0;
+  overflow: visible;
+}
+.side-logo .logo img,
+.side-logo .logo-compact img {
+  width: auto;
+  height: 42px;
+  max-width: 150px;
+  max-height: 48px;
+  object-fit: contain;
+  object-position: left center;
+  display: block;
 }
 .dash-title-row .btn {
   white-space: nowrap;
@@ -469,4 +496,553 @@
     break-inside: avoid;
     box-shadow: none;
   }
+}
+
+/* Minhas doações — lista funcional */
+.donation-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  border-bottom: 1px solid var(--line);
+  margin: 12px 0 0;
+}
+.donation-tabs a,
+.tabs a {
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  padding: 15px 16px;
+  color: #394350;
+  text-decoration: none;
+  font: inherit;
+  cursor: pointer;
+}
+.donation-tabs a.active,
+.donation-tabs a[aria-selected="true"],
+.tabs a.active {
+  color: var(--green);
+  border-color: var(--green);
+  font-weight: 750;
+}
+.table-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0;
+}
+.table-tools label {
+  flex: 1 1 220px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 450px;
+  border: 1px solid #dce3df;
+  border-radius: 10px;
+  padding: 8px 12px;
+  background: #fff;
+}
+.table-tools label input {
+  border: 0;
+  outline: 0;
+  width: 100%;
+  background: transparent;
+  font: inherit;
+}
+.table-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: stretch;
+  gap: 8px;
+  padding: 0;
+}
+.table-row-main {
+  display: grid;
+  grid-template-columns: 2fr 0.8fr 0.85fr 1.1fr 0.85fr;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 13px;
+  color: inherit;
+  text-decoration: none;
+  min-height: 86px;
+}
+.table-row-main > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+.table-actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  padding: 9px 12px 9px 0;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.table-actions a {
+  color: var(--green);
+  text-decoration: none;
+  font-weight: 650;
+  white-space: nowrap;
+}
+.table-actions a:hover {
+  text-decoration: underline;
+}
+.pagination a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid #dce3df;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  text-decoration: none;
+}
+.pagination a:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+.pagination button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.donation-aside form {
+  margin-top: 10px;
+}
+.donation-aside form + form {
+  margin-top: 8px;
+}
+.donation-aside .btn-full {
+  width: 100%;
+  justify-content: center;
+}
+@media (max-width: 900px) {
+  .table-row-main {
+    grid-template-columns: 1.4fr 0.7fr 0.7fr;
+  }
+  .table-row-main > span:nth-child(4),
+  .table-row-main > span:nth-child(5) {
+    display: none;
+  }
+  .table-header {
+    display: none;
+  }
+}
+
+/* Ícone branco/visível em botões verdes (ex.: Nova doação) */
+.btn-primary [data-icon],
+.btn-primary .app-icon {
+  filter: brightness(0) invert(1);
+  opacity: 1;
+}
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary [data-icon] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+.btn-primary .app-icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* Tag Disponível — mesmas medidas das demais */
+.status-pill.status-disponivel,
+.status-disponivel {
+  background: #eaf6ed;
+  color: #087a25;
+}
+
+/* Painel de notificações funcional */
+.notification-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.bell-button {
+  position: relative;
+  border: 0;
+  background: #fff;
+  padding: 7px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+.bell-button:hover,
+.bell-button[aria-expanded="true"] {
+  background: #f3f7f4;
+}
+.bell-button .bell-dot,
+.bell-button i.bell-dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #0f972f;
+  right: 5px;
+  top: 5px;
+  border: 1.5px solid #fff;
+}
+.notification-pop {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  width: min(340px, 86vw);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 16px 40px rgba(15, 40, 25, 0.14);
+  padding: 0;
+  z-index: 120;
+  overflow: hidden;
+}
+.notification-pop-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--line);
+}
+.notification-pop-header strong {
+  margin: 0;
+  font-size: 15px;
+}
+.notification-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: #0a6b22;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+}
+.notification-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 360px;
+  overflow-y: auto;
+}
+.notification-list li + li {
+  border-top: 1px solid #eef2ef;
+}
+.notification-list a {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px 16px;
+  text-decoration: none;
+  color: var(--ink);
+}
+.notification-list a:hover {
+  background: #f6faf7;
+}
+.notification-list a strong {
+  font-size: 13px;
+  color: #0a6b22;
+}
+.notification-list a span {
+  font-size: 12.5px;
+  line-height: 1.35;
+  color: #394350;
+}
+.notification-list a time {
+  font-size: 11px;
+  color: #7a8694;
+  margin-top: 2px;
+}
+.notification-empty {
+  margin: 0;
+  padding: 18px 16px 20px;
+  font-size: 13px;
+  color: #5d6675;
+  line-height: 1.45;
+}
+
+
+
+}
+
+/* Status + Urgente lado a lado (não substitui o status) */
+.status-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  justify-content: flex-end;
+}
+.donation-result-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  min-width: 110px;
+}
+.status-pill.status-urgente {
+  background: #fff4d6;
+  color: #a35f00;
+  border: 1px solid #f0d39a;
+}
+
+.detail-title .status-stack { justify-content: flex-start; margin-bottom: 8px; }
+
+/* ===== Logo iFeed — sem corte ===== */
+.logo,
+.logo-compact,
+.side-logo .logo,
+.public-page .logo,
+.auth-logo {
+  display: inline-flex !important;
+  align-items: center !important;
+  line-height: 0 !important;
+  overflow: visible !important;
+}
+.logo img,
+.logo-compact img,
+.side-logo .logo img,
+.side-logo .logo-compact img,
+.public-page .logo img,
+.auth-logo img {
+  width: auto !important;
+  height: 48px !important;
+  max-width: 190px !important;
+  max-height: 56px !important;
+  object-fit: contain !important;
+  object-position: left center !important;
+  display: block !important;
+  overflow: visible !important;
+  image-rendering: auto !important;
+  -ms-interpolation-mode: bicubic !important;
+}
+.side-logo {
+  height: auto !important;
+  min-height: 92px !important;
+  padding: 20px 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  overflow: visible !important;
+}
+.public-header .logo img {
+  height: 48px !important;
+  max-width: 176px !important;
+}
+
+/* ===== Jornada Como funciona — ícones iguais e maiores ===== */
+.public-page ol.journey,
+.public-page .journey {
+  list-style: none !important;
+  margin: 32px auto 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  max-width: 1200px !important;
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  column-gap: 6px !important;
+  row-gap: 28px !important;
+  align-items: start !important;
+}
+.public-page .journey::before,
+.public-page .journey:before {
+  display: none !important;
+  content: none !important;
+}
+.public-page .journey-step {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  padding: 0 8px !important;
+  min-width: 0 !important;
+  position: relative !important;
+}
+.public-page .journey-step:not(:last-child)::after {
+  content: "→" !important;
+  position: absolute !important;
+  top: 78px !important;
+  right: -8px !important;
+  width: 16px !important;
+  color: #18a13b !important;
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  pointer-events: none !important;
+}
+.public-page .journey-number {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 30px !important;
+  height: 30px !important;
+  margin: 0 0 12px !important;
+  border: 1.5px solid #0f972f !important;
+  border-radius: 50% !important;
+  background: #fff !important;
+  color: #0f972f !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  box-shadow: 0 2px 6px rgba(10, 80, 35, 0.08) !important;
+}
+.public-page .journey-icon,
+.public-page .journey-icon-art,
+.public-page .journey-icon-outline {
+  width: 140px !important;
+  height: 140px !important;
+  margin: 0 auto 14px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: visible !important;
+}
+.public-page .journey-icon img,
+.public-page .journey-icon-art img,
+.public-page .journey-icon-outline img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 140px !important;
+  max-height: 140px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  position: static !important;
+  display: block !important;
+}
+.public-page .journey-step h3 {
+  margin: 0 0 8px !important;
+  font-size: 15px !important;
+  line-height: 1.25 !important;
+  color: #0f972f !important;
+}
+.public-page .journey-step p {
+  max-width: 180px !important;
+  margin: 0 auto !important;
+  font-size: 12.5px !important;
+  line-height: 1.55 !important;
+  color: #48545f !important;
+}
+@media (max-width: 1100px) {
+  .public-page .journey-icon,
+  .public-page .journey-icon-art,
+  .public-page .journey-icon-outline {
+    width: 120px !important;
+    height: 120px !important;
+  }
+  .public-page .journey-icon img,
+  .public-page .journey-icon-art img,
+  .public-page .journey-icon-outline img {
+    max-width: 120px !important;
+    max-height: 120px !important;
+  }
+  .public-page .journey-step:not(:last-child)::after {
+    top: 68px !important;
+  }
+}
+@media (max-width: 900px) {
+  .public-page .journey {
+    grid-template-columns: 1fr !important;
+    max-width: 360px !important;
+    margin-inline: auto !important;
+    gap: 30px !important;
+  }
+  .public-page .journey-step:not(:last-child)::after {
+    content: "↓" !important;
+    top: auto !important;
+    right: auto !important;
+    left: 50% !important;
+    bottom: -20px !important;
+    transform: translateX(-50%) !important;
+  }
+  .public-page .journey-icon,
+  .public-page .journey-icon-art,
+  .public-page .journey-icon-outline {
+    width: 150px !important;
+    height: 150px !important;
+  }
+  .public-page .journey-icon img,
+  .public-page .journey-icon-art img,
+  .public-page .journey-icon-outline img {
+    max-width: 150px !important;
+    max-height: 150px !important;
+  }
+}
+
+/* ===== Status pills alinhados na tabela de doações ===== */
+.status-pill,
+i.status-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  min-height: 26px !important;
+  min-width: 88px !important;
+  padding: 5px 12px !important;
+  margin: 0 !important;
+  border: 1px solid transparent !important;
+  border-radius: 999px !important;
+  font-style: normal !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
+}
+.status-pill.status-disponivel,
+.status-disponivel {
+  background: #eaf6ed !important;
+  color: #087a25 !important;
+  border-color: #d5ebdb !important;
+}
+.status-pill.status-reservada,
+.status-reservada {
+  background: #eaf2ff !important;
+  color: #174d9b !important;
+  border-color: #d5e4fb !important;
+}
+.status-pill.status-coletada,
+.status-coletada {
+  background: #fff1dd !important;
+  color: #b86600 !important;
+  border-color: #f3dfb8 !important;
+}
+.status-pill.status-entregue,
+.status-entregue {
+  background: #0a6b22 !important;
+  color: #ffffff !important;
+  border-color: #08571b !important;
+}
+.status-pill.status-cancelada,
+.status-cancelada,
+.status-pill.status-pausada,
+.status-pausada {
+  background: #f1f2f3 !important;
+  color: #5d6675 !important;
+  border-color: #e2e5e8 !important;
+}
+/* Coluna de status: centraliza a pill na célula */
+.table-row-main > span:nth-child(5) {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+}
+.donation-aside .status-pill {
+  min-width: auto !important;
 }

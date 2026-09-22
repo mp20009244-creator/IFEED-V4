@@ -32,8 +32,25 @@
 
   const bell = one("#bell-button");
   const notifications = one("#notification-pop");
-  bell?.addEventListener("click", () => {
-    if (notifications) notifications.hidden = !notifications.hidden;
+  const setNotificationsOpen = (open) => {
+    if (!notifications || !bell) return;
+    notifications.hidden = !open;
+    bell.setAttribute("aria-expanded", String(open));
+  };
+  bell?.addEventListener("click", (event) => {
+    event.stopPropagation();
+    if (!notifications) return;
+    setNotificationsOpen(notifications.hidden);
+  });
+  document.addEventListener("click", (event) => {
+    if (!notifications || notifications.hidden) return;
+    const wrap = one(".notification-wrap");
+    if (wrap && !wrap.contains(event.target)) {
+      setNotificationsOpen(false);
+    }
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setNotificationsOpen(false);
   });
 
   all(".flash-message button").forEach((button) => {
@@ -77,6 +94,73 @@
     const file = photoInput.files?.[0];
     if (file && photoPreview) photoPreview.src = URL.createObjectURL(file);
   });
+
+  // Quantidade se adapta à unidade: kg/litros aceitam vírgula; demais só inteiros.
+  const quantityInput =
+    one("[data-quantity-input]") || one("#id_quantidade");
+  const unitSelect = one("[data-unit-select]") || one("#id_unidade");
+  const unidadesDecimais = new Set(["kg", "litros"]);
+  const helpQuantidade = () => {
+    if (!quantityInput) return null;
+    const label = quantityInput.closest("label");
+    if (!label) return null;
+    let hint = label.querySelector("[data-quantity-hint]");
+    if (!hint) {
+      hint = document.createElement("small");
+      hint.dataset.quantityHint = "1";
+      label.appendChild(hint);
+    }
+    return hint;
+  };
+  const aplicarRegraQuantidade = () => {
+    if (!quantityInput || !unitSelect) return;
+    const unidade = unitSelect.value;
+    const decimal = unidadesDecimais.has(unidade);
+    quantityInput.inputMode = decimal ? "decimal" : "numeric";
+    quantityInput.placeholder = decimal ? "Ex.: 2,5" : "Ex.: 10";
+    quantityInput.dataset.allowDecimal = decimal ? "1" : "0";
+    const hint = helpQuantidade();
+    if (hint) {
+      hint.textContent = decimal
+        ? "Use vírgula para decimais (ex.: 1,5 kg)."
+        : "Somente números inteiros para esta unidade.";
+    }
+    // Se trocar para unidade inteira e houver decimal, arredonda para baixo no campo.
+    if (!decimal && quantityInput.value) {
+      const normalizado = quantityInput.value.replace(",", ".");
+      const numero = Number(normalizado);
+      if (!Number.isNaN(numero) && !Number.isInteger(numero)) {
+        quantityInput.value = String(Math.trunc(numero));
+      }
+    }
+  };
+  const sanitizarQuantidade = (valor, allowDecimal) => {
+    let limpo = String(valor || "").replace(/[^\d.,]/g, "");
+    // Mantém só o primeiro separador decimal (vírgula ou ponto).
+    if (allowDecimal) {
+      const match = limpo.match(/^(\d*)([.,]?)(\d*)/);
+      if (!match) return "";
+      const sep = match[2] ? "," : "";
+      return `${match[1]}${sep}${match[3]}`;
+    }
+    return limpo.replace(/[.,]/g, "");
+  };
+  unitSelect?.addEventListener("change", aplicarRegraQuantidade);
+  quantityInput?.addEventListener("input", () => {
+    const allowDecimal = quantityInput.dataset.allowDecimal === "1";
+    const atual = quantityInput.value;
+    const limpo = sanitizarQuantidade(atual, allowDecimal);
+    if (atual !== limpo) quantityInput.value = limpo;
+  });
+  quantityInput?.addEventListener("blur", () => {
+    if (!quantityInput.value) return;
+    const allowDecimal = quantityInput.dataset.allowDecimal === "1";
+    // Normaliza ponto digitado para vírgula (padrão BR na interface).
+    if (allowDecimal && quantityInput.value.includes(".")) {
+      quantityInput.value = quantityInput.value.replace(".", ",");
+    }
+  });
+  aplicarRegraQuantidade();
 
   const cepInput = one("#id_cep");
   const cepFeedback = one("#cep-feedback");
@@ -274,8 +358,11 @@
     });
   });
 
+  // Só troca classe em botões puramentes visuais.
+  // Abas com <a href="?..."> (ex.: Minhas doações) devem navegar normalmente.
   all(".tabs button, .period-tabs button, .view-buttons button").forEach(
     (button) => {
+      if (button.tagName !== "BUTTON") return;
       button.addEventListener("click", () => {
         all("button", button.parentElement).forEach((item) =>
           item.classList.remove("active"),

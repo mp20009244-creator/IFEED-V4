@@ -26,6 +26,7 @@ urlpatterns = [
     path("minhas-doacoes/nova/", views.doacao_criar, name="doacao_criar"),
     path("minhas-doacoes/<int:pk>/editar/", views.doacao_editar, name="doacao_editar"),
     path("minhas-doacoes/<int:pk>/excluir/", views.doacao_excluir, name="doacao_excluir"),
+    path("minhas-doacoes/<int:pk>/cancelar/", views.doacao_cancelar, name="doacao_cancelar"),
     path("meu-impacto/", views.impacto, name="impacto"),
     path("reconhecimentos/", views.reconhecimentos, name="reconhecimentos"),
     path("perfil/", views.perfil, name="perfil"),

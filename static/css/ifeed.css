@@ -169,14 +169,20 @@ button {
   font-size: 13px;
 }
 .logo img {
-  width: 145px;
-  height: 54px;
+  width: auto;
+  height: 42px;
+  max-width: 160px;
   object-fit: contain;
   object-position: left center;
+  display: block;
 }
 .logo-compact img {
-  width: 126px;
-  height: 46px;
+  width: auto;
+  height: 40px;
+  max-width: 148px;
+  object-fit: contain;
+  object-position: left center;
+  display: block;
 }
 
 /* Navegação e rodapé públicos */
@@ -439,6 +445,9 @@ button {
   line-height: 1.7;
 }
 .journey {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   position: relative;
@@ -1822,8 +1831,12 @@ button {
   z-index: 70;
 }
 .side-logo {
-  height: 94px;
-  padding: 20px 28px;
+  height: auto;
+  min-height: 88px;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  overflow: visible;
   border-bottom: 1px solid #edf1ef;
 }
 .sidebar nav {
@@ -2080,7 +2093,10 @@ button {
   background: #fff1dd;
   color: #b86600;
 }
-.status-entregue,
+.status-entregue {
+  background: #0a6b22;
+  color: #ffffff;
+}
 .status-conquistado,
 .status-nível-atual,
 .status-doador {
@@ -4020,16 +4036,21 @@ body {
 
 .logo img {
   width: auto;
-  height: 40px;
-  max-width: 154px;
+  height: 42px;
+  max-width: 160px;
   object-fit: contain;
   object-position: left center;
+  display: block;
 }
 
 .logo-compact img,
 .side-logo .logo img {
   width: auto;
-  height: 36px;
+  height: 42px;
+  max-width: 150px;
+  object-fit: contain;
+  object-position: left center;
+  display: block;
 }
 
 /* Páginas públicas em fluxo web real, sem molduras de storyboard. */
@@ -4256,8 +4277,12 @@ body {
 }
 
 .side-logo {
-  height: 84px;
-  padding: 22px 28px;
+  height: auto;
+  min-height: 88px;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  overflow: visible;
 }
 
 .sidebar nav {
@@ -5147,4 +5172,15 @@ body {
   color: var(--green);
   font-weight: 700;
   font-size: 12px;
+}
+
+/* Evita a linha antiga do fluxograma nas páginas públicas */
+.public-page .journey:before,
+.public-page .journey::before {
+  display: none !important;
+  content: none !important;
+}
+.public-page .journey-icon {
+  border: 0 !important;
+  background: transparent !important;
 }
