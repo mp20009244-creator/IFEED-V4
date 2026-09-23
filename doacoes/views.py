@@ -1,3 +1,4 @@
+from datetime import timedelta
 from decimal import Decimal
 from urllib.parse import urlencode
 
@@ -12,6 +13,7 @@ from django.db.models import Count, Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 
@@ -220,6 +222,14 @@ def _doacoes_disponiveis_queryset(request):
             | Q(categoria__icontains=busca)
             | Q(doador__perfil_ifeed__organizacao__icontains=busca)
         )
+    if request.GET.get("refrigerado") == "1":
+        doacoes = doacoes.filter(tipo_armazenamento="refrigerado")
+    if request.GET.get("validade_proxima") == "1":
+        limite_validade = timezone.localdate() + timedelta(days=2)
+        doacoes = doacoes.filter(data_validade__lte=limite_validade)
+    if request.GET.get("disponivel_agora") == "1":
+        agora = timezone.localtime().time()
+        doacoes = doacoes.filter(horario_inicio__lte=agora, horario_fim__gte=agora)
     return doacoes, busca
 
 
